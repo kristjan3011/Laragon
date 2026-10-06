@@ -1,0 +1,4 @@
+[Tue Oct 06 14:11:20.877606 2026] [mpm_winnt:notice] [pid 10104:tid 396] AH00455: Apache/2.4.68 (Win64) OpenSSL/3.0.21 PHP/8.3.33 configured -- resuming normal operations
+[Tue Oct 06 14:11:20.877606 2026] [mpm_winnt:notice] [pid 10104:tid 396] AH00456: Apache Lounge VS18 Server built: Jun 17 2026 14:05:00
+[Tue Oct 06 14:11:20.877606 2026] [core:notice] [pid 10104:tid 396] AH00094: Command line: 'C:\\laragon\\bin\\apache\\httpd-2.4.68-260617-Win64-VS18\\bin\\httpd -d C:/laragon/bin/apache/httpd-2.4.68-260617-Win64-VS18'
+[Tue Oct 06 14:11:20.889447 2026] [mpm_winnt:notice] [pid 10104:tid 396] AH00418: Parent: Created child process 4424
