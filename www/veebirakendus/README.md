@@ -8,15 +8,15 @@ Rakendus on kirjutatud PHP-ga, andmed on MySQL andmebaasis ja kasutajaliides põ
 
 ## Käivitamine (Laragon)
 
-1. Käivita Laragonis Apache/PHP ja MySQL.
-2. Impordi andmebaas (loob andmebaasi `mario_kapakodu` koos näidisandmetega):
+1. Käivita Laragonis **Start All** (Apache ja MySQL). Kui MySQL-is on juba andmebaas `mario_kapakodu`, jäta järgmine samm vahele.
+2. Impordi andmebaas (loob andmebaasi `mario_kapakodu` koos näidisandmetega). Ava Laragoni terminal (Menu → Terminal), kus `mysql` käsk töötab:
 
    ```
-   mysql -uroot < sql/schema.sql
+   mysql -uroot < C:\laragon\www\veebirakendus\sql\schema.sql
    ```
 
    Tähelepanu: skript kustutab olemasolevad tabelid ja loob need uuesti, seega ära käivita seda andmetega andmebaasil.
-3. Ava brauseris `http://localhost/veebirakendus/` (või käivita `php -S 127.0.0.1:8000` projekti kaustas).
+3. Ava brauseris `http://localhost/veebirakendus/`. Alternatiiv ilma Apache'ita: `php -S 127.0.0.1:8000` projekti kaustas ja `http://127.0.0.1:8000/`.
 4. Andmebaasi ühendus tuleb failist `includes/config.php`. Seda saab muuta keskkonnamuutujatega `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`.
 
 Näidiskasutaja: `admin@varjupaik.ee`, parool `muuda-mind`. Vaheta see parool enne igasugust päris kasutust.
