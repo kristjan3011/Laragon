@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="et">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administraatori avaleht | Mario Käpakodu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body class="bg-light">
+    <!-- Admin nav -->
+    <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="../assets/images/logo_big.svg" alt="Mario Käpakodu" height="50"></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-label="Ava menüü"><span class="navbar-toggler-icon"></span></button>
+
+            <div class="collapse navbar-collapse" id="adminMenu">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html" aria-current="page"><i class="fa-solid fa-house me-1"></i> Avaleht</a></li>
+                    <li class="nav-item"><a class="nav-link" href="animals.html"><i class="fa-solid fa-paw me-1"></i> Loomad</a></li>
+                    <li class="nav-item"><a class="nav-link" href="animal_add.html"><i class="fa-solid fa-plus me-1"></i> Lisa loom</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-tags me-1"></i> Kategooriad</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-users me-1"></i> Kasutajad</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-regular fa-envelope me-1"></i> Päringud</a></li>
+                </ul>
+
+                <span class="navbar-text me-3"><i class="fa-solid fa-user-shield text-success me-1"></i> Admin</span>
+                <a href="../login.html" class="btn btn-outline-danger"><i class="fa-solid fa-right-from-bracket me-2"></i> Logi välja</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Admin nav end -->
+
+    <main class="container py-5">
+        <h1 class="fw-bold mb-2">Tere, admin!</h1>
+        <p class="text-muted mb-5">Ülevaade varjupaiga tegevusest.</p>
+
+        <!-- Statistika -->
+        <div class="row g-4 mb-5">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0">
+                    <div class="card-body">
+                        <i class="fa-solid fa-paw fa-3x text-success mb-3" aria-hidden="true"></i>
+                        <h2 class="fw-bold">6</h2>
+                        <p class="mb-0">Looma</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0">
+                    <div class="card-body">
+                        <i class="fa-solid fa-house fa-3x text-success mb-3" aria-hidden="true"></i>
+                        <h2 class="fw-bold">4</h2>
+                        <p class="mb-0">Kodu ootel</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0">
+                    <div class="card-body">
+                        <i class="fa-regular fa-heart fa-3x text-success mb-3" aria-hidden="true"></i>
+                        <h2 class="fw-bold">1</h2>
+                        <p class="mb-0">Broneeritud</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card text-center shadow-sm border-0">
+                    <div class="card-body">
+                        <i class="fa-regular fa-envelope fa-3x text-success mb-3" aria-hidden="true"></i>
+                        <h2 class="fw-bold">2</h2>
+                        <p class="mb-0">Uusi sõnumit</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Viimati lisatud loomad -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white fw-bold py-3">Viimati lisatud loomad</div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr><th scope="col">Nimi</th><th scope="col">Liik</th><th scope="col">Lisatud</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Tuisk</td><td>Kass</td><td>25.10.2026</td></tr>
+                                <tr><td>Bella</td><td>Koer</td><td>22.10.2026</td></tr>
+                                <tr><td>Triibik</td><td>Kass</td><td>18.10.2026</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Viimased päringud -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white fw-bold py-3">Viimased päringud</div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr><th scope="col">Teema</th><th scope="col">Saatja</th><th scope="col">Kuupäev</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Looma adopteerimine</td><td>Mari M.</td><td>26.10.2026</td></tr>
+                                <tr><td>Vabatahtlik töö</td><td>Jaan K.</td><td>24.10.2026</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

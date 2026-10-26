@@ -1,0 +1,13 @@
+.hero {
+  height: 500px;
+  background-image: url("../images/banner.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.btn-outline-success {
+  color: #198754 !important;
+}
+.btn-outline-success:hover {
+  color: #000 !important;
+}

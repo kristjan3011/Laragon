@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="et">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lisa või muuda looma | Mario Käpakodu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body class="bg-light">
+    <!-- Admin nav -->
+    <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="../assets/images/logo_big.svg" alt="Mario Käpakodu" height="50"></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-label="Ava menüü"><span class="navbar-toggler-icon"></span></button>
+
+            <div class="collapse navbar-collapse" id="adminMenu">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house me-1"></i> Avaleht</a></li>
+                    <li class="nav-item"><a class="nav-link" href="animals.html"><i class="fa-solid fa-paw me-1"></i> Loomad</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="animal_add.html" aria-current="page"><i class="fa-solid fa-plus me-1"></i> Lisa loom</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-tags me-1"></i> Kategooriad</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-users me-1"></i> Kasutajad</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-regular fa-envelope me-1"></i> Päringud</a></li>
+                </ul>
+
+                <span class="navbar-text me-3"><i class="fa-solid fa-user-shield text-success me-1"></i> Admin</span>
+                <a href="../login.html" class="btn btn-outline-danger"><i class="fa-solid fa-right-from-bracket me-2"></i> Logi välja</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Admin nav end -->
+
+    <main class="container py-5">
+        <div class="mb-4">
+            <h1 class="fw-bold mb-1">Lisa uus loom</h1>
+            <p class="text-muted mb-0">Täida loomal põhiandmed ja lisa pilt. Muutmisel kuvatakse vormis olemasolevad andmed.</p>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-lg-5">
+                <form novalidate>
+                    <h2 class="h5 fw-bold mb-3">Põhiandmed</h2>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">Nimi</label>
+                            <input type="text" id="name" class="form-control" placeholder="Looma nimi" required>
+                            <div class="invalid-feedback">Palun sisesta looma nimi.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="species" class="form-label fw-semibold">Liik</label>
+                            <select id="species" class="form-select" required>
+                                <option value="">Vali liik</option>
+                                <option>Koer</option>
+                                <option>Kass</option>
+                            </select>
+                            <div class="invalid-feedback">Palun vali liik.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="sex" class="form-label fw-semibold">Sugu</label>
+                            <select id="sex" class="form-select" required>
+                                <option value="">Vali sugu</option>
+                                <option>Isane</option>
+                                <option>Emane</option>
+                            </select>
+                            <div class="invalid-feedback">Palun vali sugu.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="age" class="form-label fw-semibold">Vanus (aastates)</label>
+                            <input type="number" id="age" class="form-control" min="0" max="30" required>
+                            <div class="invalid-feedback">Palun sisesta vanus.</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="status" class="form-label fw-semibold">Staatus</label>
+                            <select id="status" class="form-select">
+                                <option>Kodu ootel</option>
+                                <option>Broneeritud</option>
+                                <option>Kodus</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h2 class="h5 fw-bold mb-3">Kirjeldus</h2>
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-semibold">Lühikirjeldus</label>
+                        <textarea id="description" class="form-control" rows="5" placeholder="Kirjelda looma iseloomu ja vajadusi..." required></textarea>
+                        <div class="invalid-feedback">Palun kirjuta kirjeldus.</div>
+                    </div>
+
+                    <h2 class="h5 fw-bold mb-3">Pilt</h2>
+                    <div class="mb-4">
+                        <label for="photo" class="form-label fw-semibold">Lae üles pilt</label>
+                        <input type="file" id="photo" class="form-control" accept="image/png, image/jpeg">
+                        <div class="form-text">Lubatud formaadid: PNG, JPG.</div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 justify-content-end">
+                        <a href="animals.html" class="btn btn-outline-secondary px-4">Tühista</a>
+                        <button type="submit" class="btn btn-success px-4">Salvesta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script>
+        // Kliendipoolne valideerimine
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            form.classList.add('was-validated');
+        });
+    </script>
+</body>
+
+</html>
