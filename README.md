@@ -33,5 +33,5 @@ Mario Käpakodu on loomade varjupaiga veebirakendus, mis võimaldab külastajate
 - [x] Veebivormid sisaldavad kliendipoolset valideerimist
 - [x] Veebirakendus järgib kursuse jooksul õpitud turvalise programmeerimise põhimõtteid
 - [x] Lähtekood on korrektselt struktureeritud ja loetav
-- [ ] Projekt on hallatud Gitiga ja üles laaditud GitHubi *(Märkus: Git-i commit on kohalikus repos tehtud, GitHubi üleslaadimine (push) on veel tegemata.)*
+- [x] Projekt on hallatud Gitiga ja üles laaditud GitHubi
 - [x] Projekt sisaldab ajakohast README.md faili
