@@ -200,7 +200,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $info = @getimagesize($file['tmp_name']);
                 $mime = is_array($info) ? ($info['mime'] ?? null) : null;
             }
-            if ($mime === null || !isset($config['upload_mimes'][$mime])) {
+            $imgInfo = @getimagesize($file['tmp_name']);
+            $imgType = is_array($imgInfo) ? ($imgInfo[2] ?? null) : null;
+            if ($imgInfo === false || !in_array($imgType, [IMAGETYPE_JPEG, IMAGETYPE_PNG], true)) {
+                $errors['photo'] = 'Lubatud on ainult JPG ja PNG pildid.';
+            } elseif ($mime === null || !isset($config['upload_mimes'][$mime])) {
                 $errors['photo'] = 'Lubatud on ainult JPG ja PNG pildid.';
             } else {
                 $upload = ['tmp' => $file['tmp_name'], 'ext' => $config['upload_mimes'][$mime]];
@@ -305,7 +309,7 @@ $todayIso = date('Y-m-d');
     <a href="animals.php" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Tagasi loomade juurde</a>
 </div>
 
-<form method="post" action="<?= e($formAction) ?>" enctype="multipart/form-data" novalidate>
+<form method="post" action="<?= e($formAction) ?>" enctype="multipart/form-data">
     <?= csrf_field() ?>
     <div class="row g-4">
         <!-- Vasak veerg -->
@@ -316,12 +320,12 @@ $todayIso = date('Y-m-d');
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="name" class="form-label fw-semibold">Nimi <span class="text-danger">*</span></label>
-                            <input type="text" id="name" name="name" class="form-control<?= $invalid('name') ?>" maxlength="80" value="<?= e($values['name']) ?>" placeholder="Sisesta looma nimi">
+                            <input type="text" id="name" name="name" class="form-control<?= $invalid('name') ?>" maxlength="80" required value="<?= e($values['name']) ?>" placeholder="Sisesta looma nimi">
                             <?= $feedback('name') ?>
                         </div>
                         <div class="col-md-6">
                             <label for="species_id" class="form-label fw-semibold">Liik <span class="text-danger">*</span></label>
-                            <select id="species_id" name="species_id" class="form-select<?= $invalid('species_id') ?>">
+                            <select id="species_id" name="species_id" class="form-select<?= $invalid('species_id') ?>" required>
                                 <option value="">Vali liik</option>
                                 <?php foreach ($species as $sp): ?>
                                     <option value="<?= e($sp['id']) ?>" <?= (string) $sp['id'] === $values['species_id'] ? 'selected' : '' ?>><?= e($sp['name']) ?></option>
@@ -355,7 +359,7 @@ $todayIso = date('Y-m-d');
                         </div>
                         <div class="col-md-6">
                             <label for="sex" class="form-label fw-semibold">Sugu <span class="text-danger">*</span></label>
-                            <select id="sex" name="sex" class="form-select<?= $invalid('sex') ?>">
+                            <select id="sex" name="sex" class="form-select<?= $invalid('sex') ?>" required>
                                 <option value="">Vali sugu</option>
                                 <?php foreach (ANIMAL_SEXES as $sx): ?>
                                     <option value="<?= e($sx) ?>" <?= $sx === $values['sex'] ? 'selected' : '' ?>><?= e($sx) ?></option>
@@ -365,7 +369,7 @@ $todayIso = date('Y-m-d');
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="form-label fw-semibold">Staatus <span class="text-danger">*</span></label>
-                            <select id="status" name="status" class="form-select<?= $invalid('status') ?>">
+                            <select id="status" name="status" class="form-select<?= $invalid('status') ?>" required>
                                 <?php foreach (ANIMAL_STATUSES as $st): ?>
                                     <option value="<?= e($st) ?>" <?= $st === $values['status'] ? 'selected' : '' ?>><?= e($st) ?></option>
                                 <?php endforeach; ?>
@@ -374,7 +378,7 @@ $todayIso = date('Y-m-d');
                         </div>
                         <div class="col-md-6">
                             <label for="birth_date" class="form-label fw-semibold">Sünnikuupäev <span class="text-danger">*</span></label>
-                            <input type="date" id="birth_date" name="birth_date" class="form-control<?= $invalid('birth_date') ?>" max="<?= e($todayIso) ?>" value="<?= e($values['birth_date']) ?>">
+                            <input type="date" id="birth_date" name="birth_date" class="form-control<?= $invalid('birth_date') ?>" required max="<?= e($todayIso) ?>" value="<?= e($values['birth_date']) ?>">
                             <?= $feedback('birth_date') ?>
                         </div>
                         <div class="col-md-6">
@@ -401,12 +405,12 @@ $todayIso = date('Y-m-d');
                     <h2 class="h5 fw-bold mb-3">Kirjeldus</h2>
                     <div class="mb-3">
                         <label for="short_description" class="form-label fw-semibold">Lühikirjeldus <span class="text-danger">*</span></label>
-                        <input type="text" id="short_description" name="short_description" class="form-control<?= $invalid('short_description') ?>" maxlength="255" value="<?= e($values['short_description']) ?>" placeholder="Lühike tutvustus loomakaardi jaoks">
+                        <input type="text" id="short_description" name="short_description" class="form-control<?= $invalid('short_description') ?>" maxlength="255" required value="<?= e($values['short_description']) ?>" placeholder="Lühike tutvustus loomakaardi jaoks">
                         <?= $feedback('short_description') ?>
                     </div>
                     <div class="mb-0">
                         <label for="description" class="form-label fw-semibold">Pikem kirjeldus</label>
-                        <textarea id="description" name="description" class="form-control<?= $invalid('description') ?>" rows="8" placeholder="Kirjelda looma iseloomu, käitumist ja vajadusi"><?= e($values['description']) ?></textarea>
+                        <textarea id="description" name="description" class="form-control<?= $invalid('description') ?>" rows="8" maxlength="5000" placeholder="Kirjelda looma iseloomu, käitumist ja vajadusi"><?= e($values['description']) ?></textarea>
                         <?= $feedback('description') ?>
                     </div>
                 </div>
@@ -468,4 +472,89 @@ $todayIso = date('Y-m-d');
         </div>
     </div>
 </form>
+<script>
+(function () {
+    var form = document.querySelector('form[enctype="multipart/form-data"]');
+    if (!form) { return; }
+
+    var required = {
+        name: 'Palun sisesta looma nimi.',
+        species_id: 'Palun vali liik.',
+        sex: 'Palun vali sugu.',
+        status: 'Palun vali staatus.',
+        birth_date: 'Palun sisesta sünnikuupäev.',
+        short_description: 'Palun sisesta lühikirjeldus.'
+    };
+    var tooLong = {
+        name: 'Nimi on liiga pikk (max 80 tähemärki).',
+        location: 'Asukoht on liiga pikk (max 120 tähemärki).',
+        size: 'Suurus on liiga pikk (max 40 tähemärki).',
+        color: 'Värvus on liiga pikk (max 80 tähemärki).',
+        short_description: 'Lühikirjeldus on liiga pikk (max 255 tähemärki).',
+        description: 'Pikk kirjeldus on liiga pikk (max 5000 tähemärki).'
+    };
+
+    function message(el) {
+        var v = el.validity;
+        if (v.customError) { return el.validationMessage; }
+        if (v.valueMissing) { return required[el.name] || 'See väli on kohustuslik.'; }
+        if (v.tooLong) { return tooLong[el.name] || 'Väärtus on liiga pikk.'; }
+        if (v.rangeOverflow) { return 'Sünnikuupäev ei saa olla tulevikus.'; }
+        if (v.badInput || v.rangeUnderflow) { return 'Sünnikuupäev on vigane.'; }
+        return 'Väärtus on vigane.';
+    }
+
+    function feedbackFor(el) {
+        var fb = el.parentNode.querySelector('.invalid-feedback');
+        if (!fb) {
+            fb = document.createElement('div');
+            fb.className = 'invalid-feedback';
+            el.insertAdjacentElement('afterend', fb);
+        }
+        return fb;
+    }
+
+    var photo = form.elements['photo'];
+    function checkPhoto() {
+        photo.setCustomValidity('');
+        if (photo.files && photo.files.length) {
+            var f = photo.files[0];
+            if (['image/jpeg', 'image/png'].indexOf(f.type) === -1) {
+                photo.setCustomValidity('Lubatud on ainult JPG ja PNG pildid.');
+            } else if (f.size > 5 * 1024 * 1024) {
+                photo.setCustomValidity('Pilt on liiga suur (max 5 MB).');
+            }
+        }
+    }
+
+    function check(el) {
+        if (el === photo) { checkPhoto(); }
+        if (!el.validity.valid) {
+            feedbackFor(el).textContent = message(el);
+            el.classList.add('is-invalid');
+        } else {
+            el.classList.remove('is-invalid');
+        }
+    }
+
+    Array.prototype.forEach.call(form.elements, function (el) {
+        if (!el.name || el.type === 'hidden') { return; }
+        el.addEventListener('invalid', function () { check(el); });
+        ['input', 'change'].forEach(function (ev) {
+            el.addEventListener(ev, function () {
+                if (form.classList.contains('was-validated') || el.classList.contains('is-invalid')) { check(el); }
+            });
+        });
+    });
+
+    form.addEventListener('submit', function (event) {
+        checkPhoto();
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+})();
+</script>
 <?php require __DIR__ . '/../includes/admin_footer.php'; ?>

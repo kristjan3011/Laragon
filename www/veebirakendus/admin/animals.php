@@ -23,18 +23,18 @@ if (!function_exists('remove_uploaded_image')) {
 }
 
 // Filtrid GET-parameetritest (valideeritud)
-$q = trim((string) ($_GET['q'] ?? ''));
+$q = is_string($_GET['q'] ?? null) ? trim($_GET['q']) : '';
 $q = mb_substr($q, 0, 100);
 
-$speciesFilter = filter_var($_GET['species'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+$speciesFilter = filter_var(is_string($_GET['species'] ?? null) ? $_GET['species'] : null,FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $speciesFilter = $speciesFilter === false ? '' : (string) $speciesFilter;
 
-$statusFilter = (string) ($_GET['status'] ?? '');
+$statusFilter = is_string($_GET['status'] ?? null) ? $_GET['status'] : '';
 if (!in_array($statusFilter, ANIMAL_STATUSES, true)) {
     $statusFilter = '';
 }
 
-$ageFilter = (string) ($_GET['age'] ?? '');
+$ageFilter = is_string($_GET['age'] ?? null) ? $_GET['age'] : '';
 if (age_group_sql($ageFilter) === null) {
     $ageFilter = '';
 }
@@ -246,9 +246,9 @@ $pageUrl = fn(int $n) => 'animals.php?' . http_build_query(array_merge($filters,
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-3 border-top">
         <p class="small text-muted mb-0">
             <?php if ($total === 0): ?>
-                Kokku 0 loomast.
+                Kokku 0 loomi.
             <?php else: ?>
-                Kuvatakse <?= e($from) ?>–<?= e($to) ?> kokku <?= e($total) ?> loomast.
+                Kuvatakse <?= e($from) ?>–<?= e($to) ?> kokku <?= e($total) ?> loomi.
             <?php endif; ?>
         </p>
         <?php if ($pages > 1): ?>

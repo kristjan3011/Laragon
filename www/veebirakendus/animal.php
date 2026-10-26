@@ -121,7 +121,7 @@ require __DIR__ . '/includes/header.php';
                         </div>
 
                         <div class="d-flex flex-wrap gap-2">
-                            <a href="contact.php?animal=<?= (int) $animal['id'] ?>" class="btn btn-success px-4"><i class="fa-solid fa-heart me-2"></i>Soovin <?= e($animal['name']) ?>ga tutvuda</a>
+                            <a href="contact.php?animal=<?= (int) $animal['id'] ?>" class="btn btn-success px-4"><i class="fa-solid fa-heart me-2"></i>Soovin tutvuda loomaga <?= e($animal['name']) ?></a>
                             <a href="all_animals.php" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-2"></i>Tagasi nimekirja</a>
                         </div>
                     </div>

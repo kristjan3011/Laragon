@@ -77,7 +77,7 @@ require __DIR__ . '/includes/header.php';
     <main class="container py-5">
         <div class="mb-5">
             <h1 class="fw-bold display-4">Kontakt</h1>
-            <p class="fs-5 text-muted">Võta meiega ühendust – vastame hea meelega kõikidele küsimustele.</p>
+            <p class="fs-5 text-muted">Võta meiega ühendust – vastame hea meelega kõigile küsimustele.</p>
         </div>
 
         <?php if ($flash !== null): ?>

@@ -1,0 +1,3 @@
+# Admini kaudu üleslaaditud loomapildid ei kuulu repositooriumi
+assets/uploads/*
+!assets/uploads/.gitkeep

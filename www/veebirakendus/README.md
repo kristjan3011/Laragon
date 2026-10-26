@@ -2,82 +2,116 @@
 
 ## Kirjeldus
 
-Mario Käpakodu on loomade varjupaiga veebirakendus. Külastajad saavad tutvuda varjupaigas olevate loomadega ja administraator saab hallata varjupaiga infot.
+Mario Käpakodu on loomade varjupaiga veebirakendus. Külastajad saavad tutvuda varjupaigas olevate loomadega ja saata kontaktipäringu. Administraator ja toimetaja haldavad varjupaiga infot admin-paneelis.
 
-Käesolev versioon on Ülesanne 01: kasutajaliides on valmis Bootstrapi abil. PHP-d, MySQL-i ega dünaamilist sisu veel ei ole.
+Rakendus on kirjutatud PHP-ga, andmed on MySQL andmebaasis ja kasutajaliides põhineb Bootstrapil.
+
+## Käivitamine (Laragon)
+
+1. Käivita Laragonis Apache/PHP ja MySQL.
+2. Impordi andmebaas (loob andmebaasi `mario_kapakodu` koos näidisandmetega):
+
+   ```
+   mysql -uroot < sql/schema.sql
+   ```
+
+   Tähelepanu: skript kustutab olemasolevad tabelid ja loob need uuesti, seega ära käivita seda andmetega andmebaasil.
+3. Ava brauseris `http://localhost/veebirakendus/` (või käivita `php -S 127.0.0.1:8000` projekti kaustas).
+4. Andmebaasi ühendus tuleb failist `includes/config.php`. Seda saab muuta keskkonnamuutujatega `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`.
+
+Näidiskasutaja: `admin@varjupaik.ee`, parool `muuda-mind`. Vaheta see parool enne igasugust päris kasutust.
 
 ## Lehed
 
+### Avalik osa
+
 | Fail | Vaade |
 | --- | --- |
-| `index.html` | Avaleht koos loomade kaartidega |
-| `all_animals.html` | Kõigi loomade vaade, otsing, filtrid ja lehekülgede vahetus |
-| `animal.html` | Looma detailvaade |
-| `contact.html` | Kontaktandmed ja kontaktvorm |
-| `login.html` | Sisselogimisvorm |
-| `admin/index.html` | Administraatori avaleht |
-| `admin/animals.html` | Loomade haldamise vaade |
-| `admin/animal_add.html` | Looma lisamise ja muutmise vorm |
+| `index.php` | Avaleht koos viimaste loomade kaartidega |
+| `all_animals.php` | Kõik loomad: otsing nime järgi, filtrid (liik, vanus, sugu) ja lehekülgede vahetus |
+| `animal.php?id=N` | Looma detailvaade |
+| `contact.php` | Kontaktandmed ja kontaktivorm (salvestub andmebaasi) |
+| `login.php` | Sisselogimine |
+
+### Admin-paneel
+
+| Fail | Vaade |
+| --- | --- |
+| `admin/index.php` | Statistika ning viimased loomad ja päringud |
+| `admin/animals.php` | Loomade nimekiri, filtrid, kustutamine |
+| `admin/animal_form.php` | Looma lisamine ja muutmine, pildi üleslaadimine |
+| `admin/species.php` | Liikide ja tõugude haldus |
+| `admin/users.php` | Kasutajate haldus (ainult administraator) |
+| `admin/requests.php` | Kontaktipäringute haldus |
+| `admin/logout.php` | Väljalogimine (ainult POST) |
 
 ## Kaustastruktuur
 
 ```
 veebirakendus/
-├── index.html
-├── all_animals.html
-├── animal.html
-├── contact.html
-├── login.html
-├── admin/
-│   ├── index.html
-│   ├── animals.html
-│   └── animal_add.html
+├── index.php, all_animals.php, animal.php, contact.php, login.php
+├── admin/            admin-paneeli lehed
+├── includes/         config.php, functions.php, päised ja jalused
+├── sql/schema.sql    andmebaasi skeem ja näidisandmed
 ├── assets/
 │   ├── css/style.css
-│   └── images/
+│   ├── images/
+│   └── uploads/      üleslaaditud loomapildid (tekib esimesel üleslaadimisel, ei lähe Giti)
 └── README.md
 ```
 
 ## Tehnoloogiad
 
-- HTML5
-- Bootstrap 5.3.8
-- Font Awesome 7.0.1
+- HTML5, CSS3, Bootstrap 5.3.8, Font Awesome 7.0.1
+- PHP 8.3 (PDO)
+- MySQL 8.4
 
-## Valideerimine
+## Turvalisus
 
-Kõik lehed on kontrollitud W3C HTML validaatoriga (https://validator.w3.org/) ja vigu ei ole.
+- PDO ettevalmistatud päringud (SQL-süstimise vastu)
+- Kogu väljund läbib `htmlspecialchars` (XSS-i vastu)
+- CSRF-token kõigil POST-vormidel, väljalogimine on samuti POST
+- Paroolid `password_hash` / `password_verify`; üldine veateade ja katsete piirang sisselogimisel
+- Sessiooniküpsis `HttpOnly` ja `SameSite=Lax`; sessiooni ID vahetub sisselogimisel
+- Rollikontroll: kasutajaid haldab ainult administraator; viimast administraatorit ega iseennast kustutada ei saa
+- Pildi üleslaadimine: ainult JPG/PNG, kuni 5 MB, MIME ja `getimagesize` kontroll, juhuslik failinimi
+
+## Valideerimine ja testimine
+
+- W3C HTML validaator: `index.php`, `animal.php` ja `contact.php` on ilma vigade ja hoiatusteta; `all_animals.php` leht 1 oli ilma vigadeta ning ainus hoiatus (`aria-disabled` lingil) on pärast seda parandatud. `login.php` ja admin-lehed on käsitsi veel valideerimata, sest validaator nõudis automaatsetele päringutele CAPTCHA-t.
+- Kliendipoolne valideerimine: kontaktivorm, sisselogimine, loomavorm ja kasutajavorm (Bootstrap `was-validated`).
+- Käsitsi (curl) testitud: sisselogimine ja väljalogimine, loomade, liikide, tõugude, kasutajate ja päringute lisamine, muutmine ja kustutamine, pildi üleslaadimine ja valesti tüübi tagasilükkamine, rollikontroll, CSRF.
 
 ## Hindamismudel
 
 ### Front-end ehk avalik osa
 
 - [x] Veebirakendusel on avaleht, kus kuvatakse loomade nimekiri koos piltidega
-- [ ] Loomi saab otsida nime järgi
-- [ ] Loomi saab filtreerida
-- [ ] Looma valimisel kuvatakse tema detailvaade
-- [ ] Külastaja saab saata päringu kontaktivormi kaudu
+- [x] Loomi saab otsida nime järgi
+- [x] Loomi saab filtreerida
+- [x] Looma valimisel kuvatakse tema detailvaade
+- [x] Külastaja saab saata päringu kontaktivormi kaudu
 - [x] Veebirakendus kohandub erinevate ekraanisuurustega
 - [x] Veebivormid sisaldavad kliendipoolset valideerimist
 
 ### Back-end ehk haldus
 
-- [ ] Administraator saab sisse logida
-- [ ] Administraator saab hallata loomade andmeid (lisada, muuta ja kustutada CRUD)
-- [ ] Administraator saab hallata liikide andmeid
-- [ ] Administraator saab hallata tõugude andmeid
-- [ ] Administraator saab hallata kasutajate andmeid
-- [ ] Administraator saab hallata saabunud kontaktipäringuid
-- [ ] Administraator näeb veebirakenduse statistikat
+- [x] Administraator saab sisse logida
+- [x] Administraator saab hallata loomade andmeid (lisada, muuta ja kustutada CRUD)
+- [x] Administraator saab hallata liikide andmeid
+- [x] Administraator saab hallata tõugude andmeid
+- [x] Administraator saab hallata kasutajate andmeid
+- [x] Administraator saab hallata saabunud kontaktipäringuid
+- [x] Administraator näeb veebirakenduse statistikat
 
 ### Tehnilised nõuded
 
 - [x] Veebirakendus kasutab HTML-i, CSS-i ja Bootstrapi
-- [ ] Veebirakendus kasutab PHP-d andmete töötlemiseks
-- [ ] Andmed salvestatakse MySQL andmebaasi
+- [x] Veebirakendus kasutab PHP-d andmete töötlemiseks
+- [x] Andmed salvestatakse MySQL andmebaasi
 - [x] Veebirakendus kohandub erinevate ekraanisuurustega (responsive disain)
 - [x] Veebivormid sisaldavad kliendipoolset valideerimist
-- [ ] Veebirakendus järgib kursuse jooksul õpitud turvalise programmeerimise põhimõtteid
+- [x] Veebirakendus järgib kursuse jooksul õpitud turvalise programmeerimise põhimõtteid
 - [x] Lähtekood on korrektselt struktureeritud ja loetav
-- [ ] Projekt on hallatud Gitiga ja üles laaditud GitHubi
+- [ ] Projekt on hallatud Gitiga ja üles laaditud GitHubi *(Märkus: Git-i commit on kohalikus repos tehtud, GitHubi üleslaadimine (push) on veel tegemata.)*
 - [x] Projekt sisaldab ajakohast README.md faili

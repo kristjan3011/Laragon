@@ -32,7 +32,9 @@ function db(): PDO
 function start_session(): void
 {
     if (session_status() === PHP_SESSION_NONE) {
+        $https = !empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off';
         session_set_cookie_params([
+            'secure' => $https,
             'httponly' => true,
             'samesite' => 'Lax',
             'path' => '/',
@@ -125,7 +127,8 @@ function age_label(string $birthDate): string
         return $diff->y . ' a';
     }
     $months = $diff->m + $diff->y * 12;
-    return max(1, $months) . ' kuud';
+    $months = max(1, $months);
+    return $months . ($months === 1 ? ' kuu' : ' kuud');
 }
 
 // Vanusegrupp filtri jaoks: kutsikas (<1 a), noor (1–3 a), täiskasvanu (>3 a)

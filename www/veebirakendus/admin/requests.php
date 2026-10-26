@@ -8,7 +8,7 @@ require_login('../login.php');
 $pdo = db();
 
 // Filtri ja lehe väärtused (valideeritud)
-$statusFilter = in_array($_GET['status'] ?? '', REQUEST_STATUSES, true) ? (string) $_GET['status'] : '';
+$statusFilter = is_string($_GET['status'] ?? null) && in_array($_GET['status'], REQUEST_STATUSES, true) ? $_GET['status'] : '';
 
 // POST-käsitlus (PRG): enne päise väljastamist
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -193,7 +193,7 @@ $filters = ['' => 'Kõik', 'Uus' => 'Uus', 'Vastatud' => 'Vastatud'];
 </div>
 
 <?php if ($totalPages > 1): ?>
-    <nav class="mt-4" aria-label="Lehekülje navigeerimine">
+    <nav class="mt-4" aria-label="Lehekülgede vahetus">
         <ul class="pagination justify-content-center flex-wrap">
             <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
                 <a class="page-link" href="<?= e(requests_url($statusFilter, $page - 1)) ?>">&laquo; Eelmine</a>

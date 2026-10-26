@@ -16,17 +16,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
     $password = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
 
+    // Lihtne piirang: kuni 5 ebaõnnestunud katset 5 minuti jooksul
+    $maxAttempts = 5;
+    $window = 300;
+    $now = time();
+    $attempts = array_values(array_filter(
+        is_array($_SESSION['login_attempts'] ?? null) ? $_SESSION['login_attempts'] : [],
+        static fn($t) => is_int($t) && $t > $now - $window
+    ));
+    $throttled = count($attempts) >= $maxAttempts;
+
     $user = null;
-    if ($email !== '' && $password !== '' && mb_strlen($email) <= 120 && filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
-        $stmt = db()->prepare('SELECT id, name, email, password_hash, role FROM users WHERE email = :email LIMIT 1');
-        $stmt->execute(['email' => $email]);
-        $row = $stmt->fetch();
-        if ($row && password_verify($password, $row['password_hash'])) {
-            $user = $row;
+    if (!$throttled) {
+        // Fikseeritud bcrypt räsi, et tundmatu e-posti korral kuluks sama aeg
+        $dummyHash = '$2y$10$oLYOncJPKx9KG19tqV6tbeulOcew/XNaYCGZmqaItKfypN00IHeOa';
+        $row = false;
+        if ($email !== '' && $password !== '' && mb_strlen($email) <= 120 && filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
+            $stmt = db()->prepare('SELECT id, name, email, password_hash, role FROM users WHERE email = :email LIMIT 1');
+            $stmt->execute(['email' => $email]);
+            $row = $stmt->fetch();
+        }
+        if (strlen($password) <= 72) {
+            $ok = password_verify($password, $row ? $row['password_hash'] : $dummyHash);
+            if ($row && $ok) {
+                $user = $row;
+            }
         }
     }
 
     if ($user !== null) {
+        unset($_SESSION['login_attempts']);
         session_regenerate_id(true);
         $_SESSION['user'] = [
             'id' => (int) $user['id'],
@@ -37,7 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('admin/index.php');
     }
 
-    $loginError = 'Vale e-post või parool.';
+    if ($throttled) {
+        $loginError = 'Liiga palju katseid. Proovi mõne minuti pärast.';
+    } else {
+        $attempts[] = $now;
+        $loginError = 'Vale e-post või parool.';
+    }
+    $_SESSION['login_attempts'] = $attempts;
 }
 
 $flash = $loginError === null ? flash_get() : null;
@@ -56,7 +81,7 @@ require __DIR__ . '/includes/header.php';
                         <div class="text-center mb-4">
                             <img src="assets/images/logo_icon.svg" alt="" width="80">
                             <h1 class="fw-bold mt-3">Logi sisse</h1>
-                            <p class="text-muted">Logi sisse, et hallata oma päringuid<br>ja jälgida lemmiku adopteerimise staatust.</p>
+                            <p class="text-muted">Logi sisse, et hallata kontaktpäringuid<br>ja loomade andmeid.</p>
                         </div>
 
                         <?php if ($flash !== null): ?>

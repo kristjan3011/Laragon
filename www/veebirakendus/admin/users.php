@@ -14,12 +14,6 @@ if (($me['role'] ?? '') !== 'admin') {
 $pdo = db();
 $myId = (int) ($me['id'] ?? 0);
 
-// Loendab administraatoreid
-$countAdmins = static function () use ($pdo): int {
-    $stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'admin'");
-    return (int) $stmt->fetchColumn();
-};
-
 // POST-käsitlus (PRG): enne päise väljastamist
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verify();
@@ -52,10 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $nameLen = mb_strlen($name);
         if ($nameLen < 2 || $nameLen > 80) {
-            $errors['name'] = 'Nimi peab olema 2–80 märki.';
+            $errors['name'] = 'Nimi peab olema 2–80 tähemärki.';
         }
         if ($email === '' || mb_strlen($email) > 120 || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            $errors['email'] = 'Sisesta korrektne e-posti aadress (kuni 120 märki).';
+            $errors['email'] = 'Sisesta korrektne e-posti aadress (kuni 120 tähemärki).';
         }
         if (!in_array($role, USER_ROLES, true)) {
             $errors['role'] = 'Vali roll.';
@@ -63,25 +57,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $passwordLen = mb_strlen($password);
         if ($existing === null) {
             if ($passwordLen < 8) {
-                $errors['password'] = 'Parool peab olema vähemalt 8 märki.';
+                $errors['password'] = 'Parool peab olema vähemalt 8 tähemärki.';
             }
         } elseif ($password !== '' && $passwordLen < 8) {
-            $errors['password'] = 'Uus parool peab olema vähemalt 8 märki (või jäta tühjaks).';
+            $errors['password'] = 'Uus parool peab olema vähemalt 8 tähemärki (või jäta tühjaks).';
         }
-
-        // Viimase administraatori degradeerimise keeld (ka iseenda puhul)
-        if ($errors === [] && $existing !== null && $existing['role'] === 'admin' && $role !== 'admin' && $countAdmins() <= 1) {
-            $errors['role'] = 'Viimast administraatorit ei saa muuta toimetajaks.';
+        // password_hash (bcrypt) kasutab ainult esimesi 72 baiti
+        if (!isset($errors['password']) && strlen($password) > 72) {
+            $errors['password'] = 'Parool võib olla kuni 72 baiti pikk.';
         }
 
         if ($errors === []) {
+            $successMsg = '';
             try {
+                $pdo->beginTransaction();
                 if ($existing === null) {
                     $hash = password_hash($password, PASSWORD_DEFAULT);
                     $pdo->prepare('INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)')
                         ->execute([$name, $email, $hash, $role]);
-                    flash_set('Kasutaja „' . $name . '“ lisati.');
+                    $successMsg = 'Kasutaja „' . $name . '“ lisati.';
                 } else {
+                    // Lukusta administraatorite read ja muudetav kasutaja (race-safe valvur)
+                    $stmt = $pdo->prepare("SELECT id, role FROM users WHERE role = 'admin' OR id = ? ORDER BY id FOR UPDATE");
+                    $stmt->execute([$id]);
+                    $adminCount = 0;
+                    $currentRole = null;
+                    foreach ($stmt->fetchAll() as $row) {
+                        if ($row['role'] === 'admin') {
+                            $adminCount++;
+                        }
+                        if ((int) $row['id'] === $id) {
+                            $currentRole = $row['role'];
+                        }
+                    }
+                    if ($currentRole === null) {
+                        $pdo->rollBack();
+                        flash_set('Kasutajat ei leitud.', 'error');
+                        redirect('users.php');
+                    }
+                    // Viimase administraatori degradeerimise keeld (ka iseenda puhul)
+                    if ($currentRole === 'admin' && $role !== 'admin' && $adminCount <= 1) {
+                        $pdo->rollBack();
+                        $errors['role'] = 'Viimast administraatorit ei saa muuta toimetajaks.';
+                        throw new RuntimeException('last-admin');
+                    }
                     if ($password !== '') {
                         $hash = password_hash($password, PASSWORD_DEFAULT);
                         $pdo->prepare('UPDATE users SET name = ?, email = ?, role = ?, password_hash = ? WHERE id = ?')
@@ -90,15 +109,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $pdo->prepare('UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?')
                             ->execute([$name, $email, $role, $id]);
                     }
-                    if ($id === $myId) {
-                        start_session();
-                        $_SESSION['user']['name'] = $name;
-                        $_SESSION['user']['email'] = $email;
-                        $_SESSION['user']['role'] = $role;
-                    }
-                    flash_set('Kasutaja andmed salvestati.');
+                    $successMsg = 'Kasutaja andmed salvestati.';
+                }
+                $pdo->commit();
+                if ($existing !== null && $id === $myId) {
+                    start_session();
+                    $_SESSION['user']['name'] = $name;
+                    $_SESSION['user']['email'] = $email;
+                    $_SESSION['user']['role'] = $role;
+                }
+                flash_set($successMsg);
+            } catch (RuntimeException $ex) {
+                if ($ex->getMessage() !== 'last-admin') {
+                    throw $ex;
                 }
             } catch (PDOException $ex) {
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
                 if ($ex->getCode() !== '23000') {
                     throw $ex;
                 }
@@ -128,18 +156,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash_set('Iseennast ei saa kustutada.', 'error');
             redirect('users.php');
         }
-        $stmt = $pdo->prepare('SELECT role FROM users WHERE id = ?');
-        $stmt->execute([$id]);
-        $target = $stmt->fetch();
-        if (!$target) {
-            flash_set('Kasutajat ei leitud.', 'error');
-            redirect('users.php');
+        try {
+            $pdo->beginTransaction();
+            // Lukusta administraatorite read ja kustutatav kasutaja (race-safe valvur)
+            $stmt = $pdo->prepare("SELECT id, role FROM users WHERE role = 'admin' OR id = ? ORDER BY id FOR UPDATE");
+            $stmt->execute([$id]);
+            $adminCount = 0;
+            $targetRole = null;
+            foreach ($stmt->fetchAll() as $row) {
+                if ($row['role'] === 'admin') {
+                    $adminCount++;
+                }
+                if ((int) $row['id'] === $id) {
+                    $targetRole = $row['role'];
+                }
+            }
+            if ($targetRole === null) {
+                $pdo->rollBack();
+                flash_set('Kasutajat ei leitud.', 'error');
+                redirect('users.php');
+            }
+            if ($targetRole === 'admin' && $adminCount <= 1) {
+                $pdo->rollBack();
+                flash_set('Viimast administraatorit ei saa kustutada.', 'error');
+                redirect('users.php');
+            }
+            $pdo->prepare('DELETE FROM users WHERE id = ?')->execute([$id]);
+            $pdo->commit();
+        } catch (Throwable $ex) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $ex;
         }
-        if ($target['role'] === 'admin' && $countAdmins() <= 1) {
-            flash_set('Viimast administraatorit ei saa kustutada.', 'error');
-            redirect('users.php');
-        }
-        $pdo->prepare('DELETE FROM users WHERE id = ?')->execute([$id]);
         flash_set('Kasutaja kustutati.');
         redirect('users.php');
     }
@@ -222,7 +271,7 @@ $isEditing = $editUser !== null;
                                 </td>
                                 <td><?= e($u['email']) ?></td>
                                 <td>
-                                    <span class="badge <?= $u['role'] === 'admin' ? 'bg-danger' : 'bg-secondary' ?>"><?= e($u['role']) ?></span>
+                                    <span class="badge <?= $u['role'] === 'admin' ? 'bg-danger' : 'bg-secondary' ?>"><?= e($u['role'] === 'admin' ? 'Administraator' : 'Toimetaja') ?></span>
                                 </td>
                                 <td><?= e(date('d.m.Y', strtotime((string) $u['created_at']))) ?></td>
                                 <td class="text-end text-nowrap">
@@ -285,7 +334,7 @@ $isEditing = $editUser !== null;
                         <label for="user_role" class="form-label fw-semibold">Roll</label>
                         <select id="user_role" name="role" class="form-select<?= isset($errors['role']) ? ' is-invalid' : '' ?>">
                             <?php foreach (USER_ROLES as $r): ?>
-                                <option value="<?= e($r) ?>" <?= $values['role'] === $r ? 'selected' : '' ?>><?= e($r) ?></option>
+                                <option value="<?= e($r) ?>" <?= $values['role'] === $r ? 'selected' : '' ?>><?= e($r === 'admin' ? 'Administraator' : 'Toimetaja') ?></option>
                             <?php endforeach; ?>
                         </select>
                         <div class="invalid-feedback"><?= e($errors['role'] ?? '') ?></div>
@@ -293,12 +342,12 @@ $isEditing = $editUser !== null;
 
                     <div class="mb-3">
                         <label for="user_password" class="form-label fw-semibold">Parool</label>
-                        <input type="password" id="user_password" name="password" minlength="8" autocomplete="new-password"
+                        <input type="password" id="user_password" name="password" minlength="8" maxlength="72" autocomplete="new-password"
                             class="form-control<?= isset($errors['password']) ? ' is-invalid' : '' ?>"
                             <?= $isEditing ? '' : 'required' ?>>
                         <div class="invalid-feedback"><?= e($errors['password'] ?? '') ?></div>
                         <div class="form-text">
-                            <?= $isEditing ? 'Jäta tühjaks, kui parooli ei muudeta. Min 8 märki.' : 'Vähemalt 8 märki.' ?>
+                            <?= $isEditing ? 'Jäta tühjaks, kui parooli ei muudeta. 8–72 tähemärki.' : '8–72 tähemärki.' ?>
                         </div>
                     </div>
 

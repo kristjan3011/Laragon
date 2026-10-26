@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = trim((string) ($_POST['name'] ?? ''));
         $len = mb_strlen($name);
         if ($len < 2 || $len > 50) {
-            $_SESSION['form_state'] = ['form' => 'add_species', 'errors' => ['name' => 'Liigi nimi peab olema 2–50 märki.'], 'old' => ['name' => $name]];
+            $_SESSION['form_state'] = ['form' => 'add_species', 'errors' => ['name' => 'Liigi nimi peab olema 2–50 tähemärki.'], 'old' => ['name' => $name]];
             flash_set('Liigi lisamine ebaõnnestus. Paranda vead.', 'error');
         } else {
             try {
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $len = mb_strlen($name);
         if ($len < 2 || $len > 80) {
-            $errors['name'] = 'Tõu nimi peab olema 2–80 märki.';
+            $errors['name'] = 'Tõu nimi peab olema 2–80 tähemärki.';
         }
 
         if ($errors === []) {
@@ -259,7 +259,7 @@ $speciesOptions = species_list();
                         <label for="breed_species" class="form-label fw-semibold">Liik</label>
                         <select id="breed_species" name="species_id" required
                             class="form-select<?= isset($breedErrors['species_id']) ? ' is-invalid' : '' ?>">
-                            <option value="">Vali liik…</option>
+                            <option value="">Vali liik</option>
                             <?php foreach ($speciesOptions as $sp): ?>
                                 <option value="<?= (int) $sp['id'] ?>" <?= (string) $sp['id'] === (string) $breedOld['species_id'] ? 'selected' : '' ?>>
                                     <?= e($sp['name']) ?>
