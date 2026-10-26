@@ -6,32 +6,32 @@ Mario Käpakodu on loomade varjupaiga veebirakendus, mis võimaldab külastajate
 
 ### Front-end ehk avalik osa
 
-- [ ] Veebirakendusel on avaleht, kus kuvatakse loomade nimekiri koos piltidega
-- [ ] Loomi saab otsida nime järgi
-- [ ] Loomi saab filtreerida
-- [ ] Looma valimisel kuvatakse tema detailvaade
-- [ ] Külastaja saab saata päringu kontaktivormi kaudu
-- [ ] Veebirakendus kohandub erinevate ekraanisuurustega
-- [ ] Veebivormid sisaldavad kliendipoolset valideerimist
+- [x] Veebirakendusel on avaleht, kus kuvatakse loomade nimekiri koos piltidega
+- [x] Loomi saab otsida nime järgi
+- [x] Loomi saab filtreerida
+- [x] Looma valimisel kuvatakse tema detailvaade
+- [x] Külastaja saab saata päringu kontaktivormi kaudu
+- [x] Veebirakendus kohandub erinevate ekraanisuurustega
+- [x] Veebivormid sisaldavad kliendipoolset valideerimist
 
 ### Back-end ehk haldus
 
-- [ ] Administraator saab sisse logida
-- [ ] Administraator saab hallata loomade andmeid (lisada, muuta ja kustutada CRUD)
-- [ ] Administraator saab hallata liikide andmeid
-- [ ] Administraator saab hallata tõugude andmeid
-- [ ] Administraator saab hallata kasutajate andmeid
-- [ ] Administraator saab hallata saabunud kontaktipäringuid
-- [ ] Administraator näeb veebirakenduse statistikat
+- [x] Administraator saab sisse logida
+- [x] Administraator saab hallata loomade andmeid (lisada, muuta ja kustutada CRUD)
+- [x] Administraator saab hallata liikide andmeid
+- [x] Administraator saab hallata tõugude andmeid
+- [x] Administraator saab hallata kasutajate andmeid
+- [x] Administraator saab hallata saabunud kontaktipäringuid
+- [x] Administraator näeb veebirakenduse statistikat
 
 ### Tehnilised nõuded
 
-- [ ] Veebirakendus kasutab HTML-i, CSS-i ja Bootstrapi
-- [ ] Veebirakendus kasutab PHP-d andmete töötlemiseks
-- [ ] Andmed salvestatakse MySQL andmebaasi
-- [ ] Veebirakendus kohandub erinevate ekraanisuurustega (responsive disain)
-- [ ] Veebivormid sisaldavad kliendipoolset valideerimist
-- [ ] Veebirakendus järgib kursuse jooksul õpitud turvalise programmeerimise põhimõtteid
-- [ ] Lähtekood on korrektselt struktureeritud ja loetav
-- [ ] Projekt on hallatud Gitiga ja üles laaditud GitHubi
-- [ ] Projekt sisaldab ajakohast README.md faili
+- [x] Veebirakendus kasutab HTML-i, CSS-i ja Bootstrapi
+- [x] Veebirakendus kasutab PHP-d andmete töötlemiseks
+- [x] Andmed salvestatakse MySQL andmebaasi
+- [x] Veebirakendus kohandub erinevate ekraanisuurustega (responsive disain)
+- [x] Veebivormid sisaldavad kliendipoolset valideerimist
+- [x] Veebirakendus järgib kursuse jooksul õpitud turvalise programmeerimise põhimõtteid
+- [x] Lähtekood on korrektselt struktureeritud ja loetav
+- [ ] Projekt on hallatud Gitiga ja üles laaditud GitHubi *(Märkus: PHP- ja SQL-failid (www/veebirakendus) ei ole veel Giti commititud ega GitHubi üles laaditud; GitHubis on ainult HTML-versioon.)*
+- [ ] Projekt sisaldab ajakohast README.md faili *(Märkus: www/veebirakendus/README.md kirjeldab veel Ülesanne 01 versiooni, mille PHP-d ega MySQL-i ei ole; see tuleb uuendada.)*
