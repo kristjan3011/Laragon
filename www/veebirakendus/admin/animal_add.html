@@ -17,7 +17,7 @@
         <div class="container">
             <a class="navbar-brand" href="index.html"><img src="../assets/images/logo_big.svg" alt="Mario Käpakodu" height="50"></a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-label="Ava menüü"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenu" aria-controls="adminMenu" aria-expanded="false" aria-label="Ava menüü"><span class="navbar-toggler-icon"></span></button>
 
             <div class="collapse navbar-collapse" id="adminMenu">
                 <ul class="navbar-nav me-auto">
@@ -37,75 +37,155 @@
     <!-- Admin nav end -->
 
     <main class="container py-5">
-        <div class="mb-4">
-            <h1 class="fw-bold mb-1">Lisa uus loom</h1>
-            <p class="text-muted mb-0">Täida loomal põhiandmed ja lisa pilt. Muutmisel kuvatakse vormis olemasolevad andmed.</p>
-        </div>
-
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-4 p-lg-5">
-                <form novalidate>
-                    <h2 class="h5 fw-bold mb-3">Põhiandmed</h2>
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label for="name" class="form-label fw-semibold">Nimi</label>
-                            <input type="text" id="name" class="form-control" placeholder="Looma nimi" required>
-                            <div class="invalid-feedback">Palun sisesta looma nimi.</div>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="species" class="form-label fw-semibold">Liik</label>
-                            <select id="species" class="form-select" required>
-                                <option value="">Vali liik</option>
-                                <option>Koer</option>
-                                <option>Kass</option>
-                            </select>
-                            <div class="invalid-feedback">Palun vali liik.</div>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="sex" class="form-label fw-semibold">Sugu</label>
-                            <select id="sex" class="form-select" required>
-                                <option value="">Vali sugu</option>
-                                <option>Isane</option>
-                                <option>Emane</option>
-                            </select>
-                            <div class="invalid-feedback">Palun vali sugu.</div>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="age" class="form-label fw-semibold">Vanus (aastates)</label>
-                            <input type="number" id="age" class="form-control" min="0" max="30" required>
-                            <div class="invalid-feedback">Palun sisesta vanus.</div>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="status" class="form-label fw-semibold">Staatus</label>
-                            <select id="status" class="form-select">
-                                <option>Kodu ootel</option>
-                                <option>Broneeritud</option>
-                                <option>Kodus</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <h2 class="h5 fw-bold mb-3">Kirjeldus</h2>
-                    <div class="mb-4">
-                        <label for="description" class="form-label fw-semibold">Lühikirjeldus</label>
-                        <textarea id="description" class="form-control" rows="5" placeholder="Kirjelda looma iseloomu ja vajadusi..." required></textarea>
-                        <div class="invalid-feedback">Palun kirjuta kirjeldus.</div>
-                    </div>
-
-                    <h2 class="h5 fw-bold mb-3">Pilt</h2>
-                    <div class="mb-4">
-                        <label for="photo" class="form-label fw-semibold">Lae üles pilt</label>
-                        <input type="file" id="photo" class="form-control" accept="image/png, image/jpeg">
-                        <div class="form-text">Lubatud formaadid: PNG, JPG.</div>
-                    </div>
-
-                    <div class="d-flex flex-wrap gap-2 justify-content-end">
-                        <a href="animals.html" class="btn btn-outline-secondary px-4">Tühista</a>
-                        <button type="submit" class="btn btn-success px-4">Salvesta</button>
-                    </div>
-                </form>
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+            <div>
+                <h1 class="fw-bold mb-1">Lisa uus loom</h1>
+                <p class="text-muted mb-0">Sisesta looma andmed ja lisa ta varjupaiga nimekirja.</p>
             </div>
+            <a href="animals.html" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Tagasi loomade juurde</a>
         </div>
+
+        <form novalidate>
+            <div class="row g-4">
+                <!-- Vasak veerg -->
+                <div class="col-lg-8">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Looma põhiandmed</h2>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label fw-semibold">Nimi <span class="text-danger">*</span></label>
+                                    <input type="text" id="name" class="form-control" placeholder="Sisesta looma nimi" required>
+                                    <div class="invalid-feedback">Palun sisesta looma nimi.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="species" class="form-label fw-semibold">Liik <span class="text-danger">*</span></label>
+                                    <select id="species" class="form-select" required>
+                                        <option value="">Vali liik</option>
+                                        <option value="koer">Koer</option>
+                                        <option value="kass">Kass</option>
+                                    </select>
+                                    <div class="invalid-feedback">Palun vali liik.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sex" class="form-label fw-semibold">Sugu <span class="text-danger">*</span></label>
+                                    <select id="sex" class="form-select" required>
+                                        <option value="">Vali sugu</option>
+                                        <option value="isane">Isane</option>
+                                        <option value="emane">Emane</option>
+                                    </select>
+                                    <div class="invalid-feedback">Palun vali sugu.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="status" class="form-label fw-semibold">Staatus <span class="text-danger">*</span></label>
+                                    <select id="status" class="form-select" required>
+                                        <option value="">Vali staatus</option>
+                                        <option value="kodu-ootel">Kodu ootel</option>
+                                        <option value="broneeritud">Broneeritud</option>
+                                        <option value="kodus">Kodus</option>
+                                        <option value="hoolduses">Hoolduses</option>
+                                    </select>
+                                    <div class="invalid-feedback">Palun vali staatus.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="birthdate" class="form-label fw-semibold">Sünnikuupäev</label>
+                                    <input type="date" id="birthdate" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="location" class="form-label fw-semibold">Asukoht</label>
+                                    <input type="text" id="location" class="form-control" placeholder="Näiteks Haapsalu varjupaik">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="size" class="form-label fw-semibold">Suurus</label>
+                                    <select id="size" class="form-select">
+                                        <option value="">Vali suurus</option>
+                                        <option value="vaike">Väike</option>
+                                        <option value="keskmine">Keskmine</option>
+                                        <option value="suur">Suur</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="color" class="form-label fw-semibold">Värvus</label>
+                                    <input type="text" id="color" class="form-control" placeholder="Näiteks must ja valge">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Kirjeldus</h2>
+                            <div class="mb-3">
+                                <label for="shortDescription" class="form-label fw-semibold">Lühikirjeldus</label>
+                                <input type="text" id="shortDescription" class="form-control" placeholder="Lühike tutvustus loomakaardi jaoks">
+                            </div>
+                            <div class="mb-0">
+                                <label for="description" class="form-label fw-semibold">Pikem kirjeldus</label>
+                                <textarea id="description" class="form-control" rows="8" placeholder="Kirjelda looma iseloomu, käitumist ja vajadusi"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Terviseandmed</h2>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="neutered">
+                                        <label class="form-check-label" for="neutered">Loom on steriliseeritud või kastreeritud</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="chipped">
+                                        <label class="form-check-label" for="chipped">Loom on kiibistatud</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="vaccinated">
+                                        <label class="form-check-label" for="vaccinated">Loom on vaktsineeritud</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="dewormed">
+                                        <label class="form-check-label" for="dewormed">Loom on saanud parasiiditõrje</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parem veerg -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Looma pilt</h2>
+                            <div class="bg-light border rounded-3 text-center text-muted p-4 mb-3">
+                                <i class="fa-regular fa-image fa-3x mb-2"></i>
+                                <p class="mb-0">Vali loomale sobiv pilt.</p>
+                            </div>
+                            <label for="photo" class="form-label fw-semibold">Laadi pilt üles</label>
+                            <input type="file" id="photo" class="form-control" accept="image/png, image/jpeg">
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Salvestamine</h2>
+                            <p class="text-muted">Kontrolli enne salvestamist, et kõik looma andmed oleksid õiged.</p>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk me-2"></i>Salvesta loom</button>
+                                <a href="animals.html" class="btn btn-outline-secondary">Tühista</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"

@@ -40,50 +40,70 @@
     <!-- Header section end -->
 
     <!-- Animal details -->
-    <main class="container py-4">
+    <main class="container px-3 py-4">
         <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Avaleht</a></li>
                 <li class="breadcrumb-item"><a href="all_animals.html" class="text-decoration-none">Loomad</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Rex</li>
             </ol>
         </nav>
 
-        <div class="card shadow-sm border-0">
-            <div class="row g-0">
-                <div class="col-md-6">
-                    <img src="assets/images/rex.png" class="img-fluid rounded-start w-100 h-100 object-fit-cover" alt="Rex">
-                </div>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-3 p-lg-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-6">
+                        <div class="ratio ratio-1x1">
+                            <img src="assets/images/rex.png" class="rounded object-fit-cover" alt="Rex">
+                        </div>
+                    </div>
 
-                <div class="col-md-6">
-                    <div class="card-body p-4 p-lg-5">
+                    <div class="col-lg-6">
                         <h1 class="fw-bold">Rex</h1>
 
-                        <dl class="row mb-4">
-                            <dt class="col-sm-4">Liik</dt>
-                            <dd class="col-sm-8">Koer</dd>
-                            <dt class="col-sm-4">Sugu</dt>
-                            <dd class="col-sm-8">Isane</dd>
-                            <dt class="col-sm-4">Vanus</dt>
-                            <dd class="col-sm-8">Täiskasvanu, 4 a</dd>
-                            <dt class="col-sm-4">Staatus</dt>
-                            <dd class="col-sm-8"><span class="badge bg-success">Kodu ootel</span></dd>
-                        </dl>
-
-                        <h2 class="h5 fw-bold">Kirjeldus</h2>
-                        <p>Rex on sõbralik ja energiline koer, kes armastab pikki jalutuskäike ja uusi tuttavaid.
-                            Ta sobib aktiivsesse peresse, kus on aega igapäevaseks treeninguks.</p>
-
-                        <h2 class="h5 fw-bold mt-4">Täiendavad andmed</h2>
-                        <ul>
-                            <li>Tervis: vaktsineeritud, kiipi ja ussitõrjet on tehtud</li>
-                            <li>Sobib: lastega peredele, kus on aed või regulaarsed jalutuskäigud</li>
-                            <li>Varjupaigas alates: 2025</li>
+                        <ul class="list-inline text-secondary mb-3">
+                            <li class="list-inline-item me-3"><i class="fa-solid fa-paw text-success me-2"></i>Koer</li>
+                            <li class="list-inline-item me-3"><i class="fa-solid fa-mars text-success me-2"></i>Isane</li>
+                            <li class="list-inline-item"><i class="fa-regular fa-calendar text-success me-2"></i>2 aastat</li>
                         </ul>
 
-                        <div class="d-flex flex-wrap gap-2 mt-4">
-                            <a href="contact.html" class="btn btn-success px-4"><i class="fa-regular fa-heart me-2"></i>Avalda huvi</a>
-                            <a href="all_animals.html" class="btn btn-outline-success px-4">Tagasi loomade nimekirja</a>
+                        <p>Rex on sõbralik, energiline ja väga inimsõbralik koer. Ta armastab jalutuskäike,
+                            mängimist ja seltsonda. Rex sobib hästi aktiivsele perele.</p>
+
+                        <div class="table-responsive">
+                            <table class="table table-borderless align-middle mb-4">
+                                <tbody>
+                                    <tr class="border-bottom">
+                                        <th scope="row" class="w-50">Suurus</th>
+                                        <td>Keskmine (15–25 kg)</td>
+                                    </tr>
+                                    <tr class="border-bottom">
+                                        <th scope="row">Värvus</th>
+                                        <td>Pruun, must</td>
+                                    </tr>
+                                    <tr class="border-bottom">
+                                        <th scope="row">Sünniaeg</th>
+                                        <td>01.05.2022</td>
+                                    </tr>
+                                    <tr class="border-bottom">
+                                        <th scope="row">Asukoht</th>
+                                        <td>Tallinn</td>
+                                    </tr>
+                                    <tr class="border-bottom">
+                                        <th scope="row">Kastreeritud</th>
+                                        <td>Jah</td>
+                                    </tr>
+                                    <tr class="border-bottom">
+                                        <th scope="row">Kiibistatud</th>
+                                        <td>Jah</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="contact.html" class="btn btn-success px-4"><i class="fa-solid fa-heart me-2"></i>Soovin Rexiga tutvuda</a>
+                            <a href="all_animals.html" class="btn btn-outline-secondary px-4"><i class="fa-solid fa-arrow-left me-2"></i>Tagasi nimekirja</a>
                         </div>
                     </div>
                 </div>
