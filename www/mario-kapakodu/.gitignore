@@ -1,0 +1,3 @@
+# Üleslaaditud pildid ei kuulu repositooriumi
+uploads/*
+!uploads/.gitkeep
