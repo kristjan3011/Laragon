@@ -52,7 +52,7 @@ CREATE TABLE `loomad` (
   `sugu` enum('isane','emane') NOT NULL,
   `vanus` int unsigned NOT NULL,
   `sunnikuupaev` date DEFAULT NULL,
-  `suurus` enum('v├ñike','keskmine','suur') NOT NULL,
+  `suurus` enum('väike','keskmine','suur') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `varvus` varchar(100) NOT NULL,
   `asukoht` varchar(100) NOT NULL,
   `luhikirjeldus` varchar(255) NOT NULL,
@@ -81,8 +81,37 @@ CREATE TABLE `loomad` (
 
 LOCK TABLES `loomad` WRITE;
 /*!40000 ALTER TABLE `loomad` DISABLE KEYS */;
-INSERT INTO `loomad` VALUES (1,'Bella','emane',5,'2021-03-01','keskmine','Must','Tallinn','S├Ábralik koer','S├Ábralik ja rahulik koer.','bella.jpg','broneeritud',1,1,'2026-11-07',1,3,1),(2,'Nurr','isane',1,'2025-02-01','v├ñike','Hall','Tartu','Noor kass','Noor ja m├ñnguhimuline kass.','nurr.jpg','saadaval',0,1,'2026-11-07',2,6,2),(3,'Rex','isane',2,'2023-05-12','keskmine','Kuldne','Tallinn','Sõbralik koer','Energiat täis ja armastab jalutuskäike.','rex.jpg','saadaval',1,1,'2026-07-01',1,1,3),(4,'Mimi','emane',6,'2020-08-14','','Hall-valge','Tartu','Rahulik kass','Väga sõbralik ning naudib inimese seltskonda.','mimi.jpg','saadaval',1,1,'2026-07-02',2,5,4),(5,'Bruno','isane',5,'2021-01-22','suur','Pruun','Pärnu','Valvekoer','Rahulik ja ustav perekoer.','bruno.jpg','broneeritud',1,1,'2026-07-03',1,2,1),(6,'Bella','emane',1,'2025-02-18','keskmine','Must','Haapsalu','Mänguhimuline','Noor ja aktiivne koer.','bella.jpg','saadaval',0,1,'2026-07-04',1,3,2),(7,'Miisu','emane',4,'2022-06-30','','Triibuline','Viljandi','Uudishimulik kass','Armastab ronida ja mängida.','miisu.jpg','broneeritud',1,1,'2026-07-05',2,4,3),(8,'Nurr','isane',3,'2023-03-10','','Hall','Rakvere','Vaikne kass','Sobib rahulikku koju.','nurr.jpg','hoolduses',1,0,'2026-07-06',2,6,4),(9,'Musti','isane',3,'2022-04-01','keskmine','Pruun-must','Tallinn','Rõõmsameelne','Naudib pikki jalutuskäike.','musti.jpg','saadaval',1,1,'2026-07-07',1,1,1),(10,'Lotte','emane',7,'2019-09-19','keskmine','Beež','Narva','Rahulik','Väga sõbralik vanem koer.','lotte.jpg','saadaval',1,1,'2026-07-08',1,1,2),(11,'Pätu','isane',2,'2024-02-11','','Must','Jõhvi','Mänguline','Armastab pallidega mängida.','patu.jpg','saadaval',0,1,'2026-07-09',2,4,3),(12,'Kribu','emane',1,'2025-01-15','','Valge','Tallinn','Armas küülik','Harjunud inimestega.','kribu.jpg','saadaval',0,0,'2026-07-10',5,11,4),(13,'Roki','isane',8,'2018-07-07','suur','Must','Tartu','Kogenud sõber','Rahulik ja kuulekas.','roki.jpg','hoolduses',1,1,'2026-07-11',1,1,1),(14,'Lumi','emane',5,'2021-12-24','','Valge','Pärnu','Hellik','Naudib pai tegemist.','lumi.jpg','saadaval',1,1,'2026-07-12',2,4,2),(15,'Marta','emane',4,'2022-10-09','keskmine','Pruun','Rapla','Sõbralik','Sobib lastega perre.','marta.jpg','broneeritud',1,1,'2026-07-13',1,1,3),(16,'Simba','isane',2,'2024-01-08','','Oranž','Valga','Julge','Väga uudishimulik kass.','simba.jpg','saadaval',1,0,'2026-07-14',2,4,4),(17,'Bobby','isane',6,'2020-05-03','suur','Must-valge','Võru','Truu kaaslane','Armastab õues joosta.','bobby.jpg','hoolduses',1,1,'2026-07-15',1,1,1),(18,'Kiisu','emane',1,'2025-03-14','','Kilpkonn','Paide','Noor kass','Õpib alles maailma tundma.','kiisu.jpg','saadaval',0,1,'2026-07-16',2,4,2),(19,'Rufi','isane',2,'2023-08-18','keskmine','Hall','Kuressaare','Aktiivne','Sobib sportlikule perele.','rufi.jpg','saadaval',0,1,'2026-07-17',1,1,3),(20,'Muri','emane',9,'2017-11-11','suur','Must','Tallinn','Rahulik','Vajab rahulikku kodu.','muri.jpg','hoolduses',1,1,'2026-07-18',1,1,4),(21,'Triibu','isane',7,'2019-04-20','','Triibuline','Põlva','Tasane','Meeldib aknal istuda.','triibu.jpg','broneeritud',1,1,'2026-07-19',2,4,1);
+INSERT INTO `loomad` VALUES (1,'Bella','emane',5,'2021-03-01','keskmine','Must','Tallinn','Sõbralik koer','Sõbralik ja rahulik koer.','bella.jpg','broneeritud',1,1,'2026-11-07',1,3,1),(2,'Nurr','isane',1,'2025-02-01','väike','Hall','Tartu','Noor kass','Noor ja mänguhimuline kass.','nurr.jpg','saadaval',0,1,'2026-11-07',2,6,2),(3,'Rex','isane',2,'2023-05-12','keskmine','Kuldne','Tallinn','Sõbralik koer','Energiat täis ja armastab jalutuskäike.','rex.jpg','saadaval',1,1,'2026-07-01',1,1,3),(4,'Mimi','emane',6,'2020-08-14','väike','Hall-valge','Tartu','Rahulik kass','Väga sõbralik ning naudib inimese seltskonda.','mimi.jpg','saadaval',1,1,'2026-07-02',2,5,4),(5,'Bruno','isane',5,'2021-01-22','suur','Pruun','Pärnu','Valvekoer','Rahulik ja ustav perekoer.','bruno.jpg','broneeritud',1,1,'2026-07-03',1,2,1),(6,'Bella','emane',1,'2025-02-18','keskmine','Must','Haapsalu','Mänguhimuline','Noor ja aktiivne koer.','bella.jpg','saadaval',0,1,'2026-07-04',1,3,2),(7,'Miisu','emane',4,'2022-06-30','väike','Triibuline','Viljandi','Uudishimulik kass','Armastab ronida ja mängida.','miisu.jpg','broneeritud',1,1,'2026-07-05',2,4,3),(8,'Nurr','isane',3,'2023-03-10','väike','Hall','Rakvere','Vaikne kass','Sobib rahulikku koju.','nurr.jpg','hoolduses',1,0,'2026-07-06',2,6,4),(9,'Musti','isane',3,'2022-04-01','keskmine','Pruun-must','Tallinn','Rõõmsameelne','Naudib pikki jalutuskäike.','musti.jpg','saadaval',1,1,'2026-07-07',1,1,1),(10,'Lotte','emane',7,'2019-09-19','keskmine','Beež','Narva','Rahulik','Väga sõbralik vanem koer.','lotte.jpg','saadaval',1,1,'2026-07-08',1,1,2),(11,'Pätu','isane',2,'2024-02-11','väike','Must','Jõhvi','Mänguline','Armastab pallidega mängida.','patu.jpg','saadaval',0,1,'2026-07-09',2,4,3),(12,'Kribu','emane',1,'2025-01-15','väike','Valge','Tallinn','Armas küülik','Harjunud inimestega.','kribu.jpg','saadaval',0,0,'2026-07-10',5,11,4),(13,'Roki','isane',8,'2018-07-07','suur','Must','Tartu','Kogenud sõber','Rahulik ja kuulekas.','roki.jpg','hoolduses',1,1,'2026-07-11',1,1,1),(14,'Lumi','emane',5,'2021-12-24','väike','Valge','Pärnu','Hellik','Naudib pai tegemist.','lumi.jpg','saadaval',1,1,'2026-07-12',2,4,2),(15,'Marta','emane',4,'2022-10-09','keskmine','Pruun','Rapla','Sõbralik','Sobib lastega perre.','marta.jpg','broneeritud',1,1,'2026-07-13',1,1,3),(16,'Simba','isane',2,'2024-01-08','väike','Oranž','Valga','Julge','Väga uudishimulik kass.','simba.jpg','saadaval',1,0,'2026-07-14',2,4,4),(17,'Bobby','isane',6,'2020-05-03','suur','Must-valge','Võru','Truu kaaslane','Armastab õues joosta.','bobby.jpg','hoolduses',1,1,'2026-07-15',1,1,1),(18,'Kiisu','emane',1,'2025-03-14','väike','Kilpkonn','Paide','Noor kass','Õpib alles maailma tundma.','kiisu.jpg','saadaval',0,1,'2026-07-16',2,4,2),(19,'Rufi','isane',2,'2023-08-18','keskmine','Hall','Kuressaare','Aktiivne','Sobib sportlikule perele.','rufi.jpg','saadaval',0,1,'2026-07-17',1,1,3),(20,'Muri','emane',9,'2017-11-11','suur','Must','Tallinn','Rahulik','Vajab rahulikku kodu.','muri.jpg','hoolduses',1,1,'2026-07-18',1,1,4),(21,'Triibu','isane',7,'2019-04-20','väike','Triibuline','Põlva','Tasane','Meeldib aknal istuda.','triibu.jpg','broneeritud',1,1,'2026-07-19',2,4,1);
 /*!40000 ALTER TABLE `loomad` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `menu`
+--
+
+DROP TABLE IF EXISTS `menu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `menu` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nimetus` varchar(100) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `ikoon` varchar(100) DEFAULT NULL,
+  `jarjekord` int NOT NULL DEFAULT '0',
+  `aktiivne` tinyint(1) NOT NULL DEFAULT '1',
+  `loodud` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `menu`
+--
+
+LOCK TABLES `menu` WRITE;
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+INSERT INTO `menu` VALUES (1,'Avaleht','index.php','house',1,1,'2026-11-07 15:51:17'),(2,'Kõik loomad','all_animals.php','heart',2,1,'2026-11-07 15:51:17'),(3,'Kontakt','contact.php','envelope',3,1,'2026-11-07 15:51:17');
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -104,7 +133,7 @@ CREATE TABLE `paringud` (
   PRIMARY KEY (`id`),
   KEY `fk_paringud_loom` (`loom_id`),
   CONSTRAINT `fk_paringud_loom` FOREIGN KEY (`loom_id`) REFERENCES `loomad` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,4 +212,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-07 17:20:00
+-- Dump completed on 2026-11-07 18:08:08
