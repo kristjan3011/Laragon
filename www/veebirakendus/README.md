@@ -55,6 +55,7 @@ veebirakendus/
 ├── sql/schema.sql    andmebaasi skeem ja näidisandmed
 ├── assets/
 │   ├── css/style.css
+│   ├── js/           (vanilla JS, praegu tühi)
 │   ├── images/
 │   └── uploads/      üleslaaditud loomapildid (tekib esimesel üleslaadimisel, ei lähe Giti)
 └── README.md
