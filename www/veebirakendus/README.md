@@ -57,7 +57,7 @@ veebirakendus/
 │   ├── css/style.css
 │   ├── js/           (vanilla JS, praegu tühi)
 │   ├── images/
-│   └── uploads/      üleslaaditud loomapildid (tekib esimesel üleslaadimisel, ei lähe Giti)
+├── uploads/          üleslaaditud loomapildid (ei lähe Giti)
 └── README.md
 ```
 

@@ -9,8 +9,8 @@ return [
     ],
     'per_page_public' => 8,
     'per_page_admin' => 10,
-    'upload_dir' => dirname(__DIR__) . '/assets/uploads',
-    'upload_url' => 'assets/uploads',
+    'upload_dir' => dirname(__DIR__) . '/uploads',
+    'upload_url' => 'uploads',
     'upload_max_bytes' => 5 * 1024 * 1024,
     'upload_mimes' => [
         'image/jpeg' => 'jpg',
