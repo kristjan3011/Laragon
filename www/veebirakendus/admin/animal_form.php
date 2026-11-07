@@ -370,6 +370,7 @@ $todayIso = date('Y-m-d');
                         <div class="col-md-6">
                             <label for="status" class="form-label fw-semibold">Staatus <span class="text-danger">*</span></label>
                             <select id="status" name="status" class="form-select<?= $invalid('status') ?>" required>
+                                <option value="" <?= $values['status'] === '' ? 'selected' : '' ?>>Vali staatus</option>
                                 <?php foreach (ANIMAL_STATUSES as $st): ?>
                                     <option value="<?= e($st) ?>" <?= $st === $values['status'] ? 'selected' : '' ?>><?= e($st) ?></option>
                                 <?php endforeach; ?>
