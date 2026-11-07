@@ -1,0 +1,21 @@
+nimi,liik,sugu,vanus,sunnikuupaev,suurus,varvus,asukoht,luhikirjeldus,kirjeldus,pilt,staatus,steriliseeritud,kiibistatud,lisatud
+Rex,Koer,isane,2,2023-05-12,keskmine,Kuldne,Tallinn,Sõbralik koer,Energiat täis ja armastab jalutuskäike.,rex.jpg,saadaval,1,1,2026-07-01
+Mimi,Kass,emane,6,2020-08-14,väike,Hall-valge,Tartu,Rahulik kass,Väga sõbralik ning naudib inimese seltskonda.,mimi.jpg,saadaval,1,1,2026-07-02
+Bruno,Koer,isane,5,2021-01-22,suur,Pruun,Pärnu,Valvekoer,Rahulik ja ustav perekoer.,bruno.jpg,broneeritud,1,1,2026-07-03
+Bella,Koer,emane,1,2025-02-18,keskmine,Must,Haapsalu,Mänguhimuline,Noor ja aktiivne koer.,bella.jpg,saadaval,0,1,2026-07-04
+Miisu,Kass,emane,4,2022-06-30,väike,Triibuline,Viljandi,Uudishimulik kass,Armastab ronida ja mängida.,miisu.jpg,broneeritud,1,1,2026-07-05
+Nurr,Kass,isane,3,2023-03-10,väike,Hall,Rakvere,Vaikne kass,Sobib rahulikku koju.,nurr.jpg,hoolduses,1,0,2026-07-06
+Musti,Koer,isane,3,2022-04-01,keskmine,Pruun-must,Tallinn,Rõõmsameelne,Naudib pikki jalutuskäike.,musti.jpg,saadaval,1,1,2026-07-07
+Lotte,Koer,emane,7,2019-09-19,keskmine,Beež,Narva,Rahulik,Väga sõbralik vanem koer.,lotte.jpg,saadaval,1,1,2026-07-08
+Pätu,Kass,isane,2,2024-02-11,väike,Must,Jõhvi,Mänguline,Armastab pallidega mängida.,patu.jpg,saadaval,0,1,2026-07-09
+Kribu,Küülik,emane,1,2025-01-15,väike,Valge,Tallinn,Armas küülik,Harjunud inimestega.,kribu.jpg,saadaval,0,0,2026-07-10
+Roki,Koer,isane,8,2018-07-07,suur,Must,Tartu,Kogenud sõber,Rahulik ja kuulekas.,roki.jpg,hoolduses,1,1,2026-07-11
+Lumi,Kass,emane,5,2021-12-24,väike,Valge,Pärnu,Hellik,Naudib pai tegemist.,lumi.jpg,saadaval,1,1,2026-07-12
+Marta,Koer,emane,4,2022-10-09,keskmine,Pruun,Rapla,Sõbralik,Sobib lastega perre.,marta.jpg,broneeritud,1,1,2026-07-13
+Simba,Kass,isane,2,2024-01-08,väike,Oranž,Valga,Julge,Väga uudishimulik kass.,simba.jpg,saadaval,1,0,2026-07-14
+Bobby,Koer,isane,6,2020-05-03,suur,Must-valge,Võru,Truu kaaslane,Armastab õues joosta.,bobby.jpg,hoolduses,1,1,2026-07-15
+Kiisu,Kass,emane,1,2025-03-14,väike,Kilpkonn,Paide,Noor kass,Õpib alles maailma tundma.,kiisu.jpg,saadaval,0,1,2026-07-16
+Rufi,Koer,isane,2,2023-08-18,keskmine,Hall,Kuressaare,Aktiivne,Sobib sportlikule perele.,rufi.jpg,saadaval,0,1,2026-07-17
+Muri,Koer,emane,9,2017-11-11,suur,Must,Tallinn,Rahulik,Vajab rahulikku kodu.,muri.jpg,hoolduses,1,1,2026-07-18
+Triibu,Kass,isane,7,2019-04-20,väike,Triibuline,Põlva,Tasane,Meeldib aknal istuda.,triibu.jpg,broneeritud,1,1,2026-07-19
+Sipsik,Kass,emane,3,2023-06-06,väike,Must-valge,Keila,Seltskondlik,Naudib mängimist ja tähelepanu.,sipsik.jpg,saadaval,1,1,2026-07-20
