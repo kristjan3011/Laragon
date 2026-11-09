@@ -2,6 +2,9 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/functions.php';
 
+// Kontroll enne POST-käsitlust: anonüümne POST ei tohi kustutada
+require_login('../login.php');
+
 // Kustutatud või asendatud üleslaaditud pildi eemaldamine (ainult assets/uploads kaustast)
 if (!function_exists('remove_uploaded_image')) {
     function remove_uploaded_image(?string $image): void

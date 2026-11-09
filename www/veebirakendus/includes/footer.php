@@ -34,9 +34,35 @@
             <hr class="my-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <small>&copy; <?= date('Y') ?> Loomade Varjupaik. Kõik õigused kaitstud.</small>
+                <?php if (consent_status() !== null): ?>
+                    <form method="post" action="<?= e($base) ?>kuepsised.php">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="action" value="reset">
+                        <button type="submit" class="btn btn-link btn-sm text-dark p-0">Muuda küpsiste valikut</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </footer>
+    <?php if (consent_status() === null): ?>
+        <div class="position-fixed bottom-0 start-0 end-0 bg-white border-top shadow p-3" role="region" aria-label="Küpsiste teade">
+            <div class="container d-flex flex-wrap gap-3 align-items-center justify-content-between">
+                <p class="mb-0">Kasutame küpsiseid, et leht toimiks ja saaksime seda parandada.</p>
+                <div class="d-flex gap-2">
+                    <form method="post" action="<?= e($base) ?>kuepsised.php">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="action" value="reject">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Ainult vajalikud</button>
+                    </form>
+                    <form method="post" action="<?= e($base) ?>kuepsised.php">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="action" value="accept">
+                        <button type="submit" class="btn btn-success btn-sm">Nõustun</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"

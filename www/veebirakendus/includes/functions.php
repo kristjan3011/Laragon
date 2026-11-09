@@ -95,6 +95,15 @@ function redirect(string $url): never
     exit;
 }
 
+// Küpsiste nõusolek: 'jah', 'ei' või null (valikut pole tehtud)
+const CONSENT_COOKIE = 'kuepsiste_noustumus';
+
+function consent_status(): ?string
+{
+    $value = $_COOKIE[CONSENT_COOKIE] ?? null;
+    return in_array($value, ['jah', 'ei'], true) ? $value : null;
+}
+
 function current_user(): ?array
 {
     start_session();

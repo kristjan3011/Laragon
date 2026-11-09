@@ -32,6 +32,7 @@ Näidiskasutaja: `admin@varjupaik.ee`, parool `muuda-mind`. Vaheta see parool en
 | `animal.php?id=N` | Looma detailvaade |
 | `contact.php` | Kontaktandmed ja kontaktivorm (salvestub andmebaasi) |
 | `login.php` | Sisselogimine |
+| `kuepsised.php` | Küpsiste nõusoleku salvestamine, muutmine ja kustutamine (ainult POST) |
 
 ### Admin-paneel
 
@@ -76,6 +77,8 @@ veebirakendus/
 - Sessiooniküpsis `HttpOnly` ja `SameSite=Lax`; sessiooni ID vahetub sisselogimisel
 - Rollikontroll: kasutajaid haldab ainult administraator; viimast administraatorit ega iseennast kustutada ei saa
 - Pildi üleslaadimine: ainult JPG/PNG, kuni 5 MB, MIME ja `getimagesize` kontroll, juhuslik failinimi
+- Admin-lehed (sh loomade lisamine, muutmine ja kustutamine) kontrollivad sisselogimist enne POST-päringu töötlemist
+- Küpsised: sessioonaküpsis on `HttpOnly` ja `SameSite=Lax`; küpsiste nõusolek on küpsis `kuepsiste_noustumus` (365 päeva, `HttpOnly`, `SameSite=Lax`), mida saab muuta või kustutada jaluses
 
 ## Valideerimine ja testimine
 
