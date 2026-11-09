@@ -79,6 +79,7 @@ veebirakendus/
 - Pildi üleslaadimine: ainult JPG/PNG, kuni 5 MB, MIME ja `getimagesize` kontroll, juhuslik failinimi
 - Admin-lehed (sh loomade lisamine, muutmine ja kustutamine) kontrollivad sisselogimist enne POST-päringu töötlemist
 - Küpsised: sessioonaküpsis on `HttpOnly` ja `SameSite=Lax`; küpsiste nõusolek on küpsis `kuepsiste_noustumus` (365 päeva, `HttpOnly`, `SameSite=Lax`), mida saab muuta või kustutada jaluses
+- "Jäta mind meelde" salvestab sisselogimisel küpsisesse `remember_email` ainult e-posti aadressi (30 päeva); parooli küpsisesse ei panda
 
 ## Valideerimine ja testimine
 

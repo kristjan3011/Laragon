@@ -129,3 +129,19 @@ INSERT INTO contact_requests (name, email, topic, message, status) VALUES
     ('Kati Mae', 'kati@example.com', 'Looma adopteerimine', 'Tahaksin tutvuda Rexiga.', 'Uus'),
     ('Martin Tamm', 'martin@example.com', 'Üldine küsimus', 'Kas vastuvõtt on laupäeval?', 'Uus'),
     ('Liisa Kask', 'liisa@example.com', 'Vabatahtlik töö', 'Soovin aidata kõndida koeri.', 'Vastatud');
+
+-- Moodul 3, ülesanne 10: menüü andmebaasist
+CREATE TABLE IF NOT EXISTS menu (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nimetus VARCHAR(100) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    ikoon VARCHAR(100) DEFAULT NULL,
+    jarjekord INT NOT NULL DEFAULT 0,
+    aktiivne TINYINT(1) NOT NULL DEFAULT 1,
+    loodud TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO menu (nimetus, url, ikoon, jarjekord) VALUES
+    ('Avaleht', 'index.php', 'house', 1),
+    ('Loomad', 'all_animals.php', 'heart', 2),
+    ('Kontakt', 'contact.php', 'envelope', 3);

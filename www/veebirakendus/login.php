@@ -7,7 +7,9 @@ if (current_user() !== null) {
     redirect('admin/index.php');
 }
 
-$email = '';
+// E-post täidetakse küpsisest, kui kasutaja on varem "Jäta mind meelde" valinud
+$email = is_string($_COOKIE['remember_email'] ?? null) ? $_COOKIE['remember_email'] : '';
+$rememberChecked = $_SERVER['REQUEST_METHOD'] === 'POST' ? !empty($_POST['remember']) : isset($_COOKIE['remember_email']);
 $loginError = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,6 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user !== null) {
         unset($_SESSION['login_attempts']);
         session_regenerate_id(true);
+
+        // Küpsis salvestab ainult e-posti aadressi (mitte parooli), 30 päeva
+        $rememberCookie = ['path' => '/', 'httponly' => true, 'samesite' => 'Lax'];
+        if (!empty($_POST['remember'])) {
+            setcookie('remember_email', $user['email'], $rememberCookie + ['expires' => time() + 60 * 60 * 24 * 30]);
+        } else {
+            setcookie('remember_email', '', $rememberCookie + ['expires' => time() - 3600]);
+        }
+
         $_SESSION['user'] = [
             'id' => (int) $user['id'],
             'name' => $user['name'],
@@ -116,7 +127,12 @@ require __DIR__ . '/includes/header.php';
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-end align-items-center mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="remember" name="remember" value="1"
+                                        <?= $rememberChecked ? 'checked' : '' ?>>
+                                    <label class="form-check-label" for="remember">Jäta mind meelde</label>
+                                </div>
                                 <a href="#" class="text-success text-decoration-none">Unustasid parooli?</a>
                             </div>
 

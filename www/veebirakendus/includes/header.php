@@ -33,11 +33,10 @@ $pageTitle = $pageTitle ?? 'Mario Käpakodu';
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link <?= $active === 'home' ? 'active' : '' ?>" href="<?= e($base) ?>index.php"><strong>Avaleht</strong></a></li>
-                        <li class="nav-item"><a class="nav-link <?= $active === 'animals' ? 'active' : '' ?>" href="<?= e($base) ?>all_animals.php"><strong>Loomad</strong></a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"><strong>Kuidas aidata</strong></a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"><strong>Meist</strong></a></li>
-                        <li class="nav-item"><a class="nav-link <?= $active === 'contact' ? 'active' : '' ?>" href="<?= e($base) ?>contact.php"><strong>Kontakt</strong></a></li>
+                        <?php // Menüü loetakse tabelist menu (ülesanne 10) ?>
+                        <?php foreach (db()->query('SELECT nimetus, url FROM menu WHERE aktiivne = 1 ORDER BY jarjekord')->fetchAll() as $item): ?>
+                            <li class="nav-item"><a class="nav-link <?= basename($_SERVER['SCRIPT_NAME']) === $item['url'] ? 'active' : '' ?>" href="<?= e($base) ?><?= e($item['url']) ?>"><strong><?= e($item['nimetus']) ?></strong></a></li>
+                        <?php endforeach; ?>
                     </ul>
                     <?php if ($user): ?>
                         <a class="btn btn-outline-success me-2" href="<?= e($base) ?>admin/index.php">Admin</a>
