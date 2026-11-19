@@ -11,3 +11,25 @@
 .btn-outline-success:hover {
   color: #000 !important;
 }
+
+.card-img-top {
+  height: 220px;
+  object-fit: cover;
+}
+
+@media (max-width: 767.98px) {
+  .hero {
+    height: auto;
+    min-height: 440px;
+    display: flex;
+    align-items: center;
+  }
+  .hero-text {
+    position: static !important;
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .hero .display-4 {
+    font-size: 2.25rem;
+  }
+}

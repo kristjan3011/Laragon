@@ -1,0 +1,290 @@
+{
+  "date": "2026-11-19",
+  "environment": "Isolated MySQL 8.4.3 and PHP 8.3.33; disposable data only",
+  "functional_checks": [
+    {
+      "test": "Public index.php",
+      "passed": true
+    },
+    {
+      "test": "Public all_animals.php",
+      "passed": true
+    },
+    {
+      "test": "Public animal.php?id=1",
+      "passed": true
+    },
+    {
+      "test": "Public contact.php",
+      "passed": true
+    },
+    {
+      "test": "Public login.php",
+      "passed": true
+    },
+    {
+      "test": "Four latest homepage animals",
+      "passed": true
+    },
+    {
+      "test": "Invalid ID redirects animal.php",
+      "passed": true
+    },
+    {
+      "test": "Invalid ID redirects animal.php?id=abc",
+      "passed": true
+    },
+    {
+      "test": "Invalid ID redirects animal.php?id=-1",
+      "passed": true
+    },
+    {
+      "test": "Invalid ID redirects animal.php?id=999999",
+      "passed": true
+    },
+    {
+      "test": "Invalid ID redirects animal.php?id[]=1",
+      "passed": true
+    },
+    {
+      "test": "Breadcrumb all_animals.php",
+      "passed": true
+    },
+    {
+      "test": "Breadcrumb contact.php",
+      "passed": true
+    },
+    {
+      "test": "Breadcrumb animal.php?id=1",
+      "passed": true
+    },
+    {
+      "test": "Anonymous blocked admin/index.php",
+      "passed": true
+    },
+    {
+      "test": "Anonymous blocked admin/animals.php",
+      "passed": true
+    },
+    {
+      "test": "Anonymous blocked admin/animal_form.php",
+      "passed": true
+    },
+    {
+      "test": "Anonymous blocked admin/species.php",
+      "passed": true
+    },
+    {
+      "test": "Anonymous blocked admin/users.php",
+      "passed": true
+    },
+    {
+      "test": "Anonymous blocked admin/requests.php",
+      "passed": true
+    },
+    {
+      "test": "Anonymous deletion blocked",
+      "passed": true
+    },
+    {
+      "test": "Contact saves animal relation",
+      "passed": true
+    },
+    {
+      "test": "Invalid contact animal rejected",
+      "passed": true
+    },
+    {
+      "test": "Contact CSRF rejection",
+      "passed": true
+    },
+    {
+      "test": "Wrong password rejected",
+      "passed": true
+    },
+    {
+      "test": "Admin login",
+      "passed": true
+    },
+    {
+      "test": "Remember email cookie",
+      "passed": true
+    },
+    {
+      "test": "Admin page admin/index.php",
+      "passed": true
+    },
+    {
+      "test": "Admin page admin/animals.php",
+      "passed": true
+    },
+    {
+      "test": "Admin page admin/animal_form.php",
+      "passed": true
+    },
+    {
+      "test": "Admin page admin/species.php",
+      "passed": true
+    },
+    {
+      "test": "Admin page admin/users.php",
+      "passed": true
+    },
+    {
+      "test": "Admin page admin/requests.php",
+      "passed": true
+    },
+    {
+      "test": "Species rename",
+      "passed": true
+    },
+    {
+      "test": "Duplicate species rejected",
+      "passed": true
+    },
+    {
+      "test": "Short species name rejected",
+      "passed": true
+    },
+    {
+      "test": "Rename CSRF rejected",
+      "passed": true
+    },
+    {
+      "test": "Breed rename preserves relation",
+      "passed": true
+    },
+    {
+      "test": "Animal creation stores author",
+      "passed": true
+    },
+    {
+      "test": "Animal update preserves author",
+      "passed": true
+    },
+    {
+      "test": "Delete animal preserves inquiry",
+      "passed": true
+    },
+    {
+      "test": "Deleting creator preserves animal",
+      "passed": true
+    },
+    {
+      "test": "Legacy redirects /mario-kapakodu/index.php",
+      "passed": true
+    },
+    {
+      "test": "Legacy redirects /mario-kapakodu/animal.php?id=1",
+      "passed": true
+    },
+    {
+      "test": "Legacy redirects /mario-kapakodu/admin/index.php",
+      "passed": true
+    },
+    {
+      "test": "Legacy redirects /mario-kapakodu/admin/animal_edit.php?id=1",
+      "passed": true
+    },
+    {
+      "test": "Legacy POST not forwarded",
+      "passed": true
+    },
+    {
+      "test": "Migration repeatable without data loss",
+      "passed": true
+    },
+    {
+      "test": "Logout",
+      "passed": true
+    },
+    {
+      "test": "Remember cookie cleared when unchecked",
+      "passed": true
+    },
+    {
+      "test": "Editor cannot manage users",
+      "passed": true
+    },
+    {
+      "test": "PNG upload accepted",
+      "passed": true
+    },
+    {
+      "test": "Uploaded image exists",
+      "passed": true
+    },
+    {
+      "test": "Pagination second page",
+      "passed": true
+    },
+    {
+      "test": "Deleted animal removes uploaded image",
+      "passed": true
+    },
+    {
+      "test": "Fake PNG rejected",
+      "passed": true
+    },
+    {
+      "test": "Cookie consent saved",
+      "passed": true
+    },
+    {
+      "test": "Cookie consent reset",
+      "passed": true
+    }
+  ],
+  "html_validator": "W3C Nu https://validator.w3.org/nu/",
+  "html_results": [
+    {
+      "page": "admin-animals.php.html",
+      "messages": []
+    },
+    {
+      "page": "admin-animal_form.php.html",
+      "messages": []
+    },
+    {
+      "page": "admin-index.php.html",
+      "messages": []
+    },
+    {
+      "page": "admin-requests.php.html",
+      "messages": []
+    },
+    {
+      "page": "admin-species.php.html",
+      "messages": []
+    },
+    {
+      "page": "admin-users.php.html",
+      "messages": []
+    },
+    {
+      "page": "all_animals.php.html",
+      "messages": []
+    },
+    {
+      "page": "animal.php.html",
+      "messages": []
+    },
+    {
+      "page": "contact.php.html",
+      "messages": []
+    },
+    {
+      "page": "index.php.html",
+      "messages": []
+    },
+    {
+      "page": "login.php.html",
+      "messages": []
+    }
+  ],
+  "course_tests": "Personal results of course tests 1, 2, 3 unavailable; not claimed complete",
+  "limitations": [
+    "No visual browser/mobile inspection performed",
+    "Optional password-reset, API and other extensions not implemented"
+  ]
+}

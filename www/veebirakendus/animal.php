@@ -22,18 +22,7 @@ $base = '';
 $active = 'animals';
 
 if ($animal === null) {
-    http_response_code(404);
-    $pageTitle = 'Looma ei leitud';
-    require __DIR__ . '/includes/header.php';
-    ?>
-    <main class="container py-5 text-center">
-        <h1 class="fw-bold mb-3">Looma ei leitud</h1>
-        <p class="text-muted mb-4">Otsitud looma ei ole olemas või on link vale.</p>
-        <a class="btn btn-outline-secondary px-4" href="all_animals.php"><i class="fa-solid fa-arrow-left me-2"></i>Tagasi nimekirja</a>
-    </main>
-    <?php
-    require __DIR__ . '/includes/footer.php';
-    exit;
+    redirect('index.php');
 }
 
 $pageTitle = $animal['name'];
@@ -45,13 +34,14 @@ require __DIR__ . '/includes/header.php';
 ?>
     <!-- Animal details -->
     <main class="container px-3 py-4">
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="index.php" class="text-decoration-none">Avaleht</a></li>
-                <li class="breadcrumb-item"><a href="all_animals.php" class="text-decoration-none">Loomad</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><?= e($animal['name']) ?></li>
-            </ol>
-        </nav>
+        <?php
+        $breadcrumbs = [
+            ['label' => 'Avaleht', 'url' => 'index.php'],
+            ['label' => 'Kõik loomad', 'url' => 'all_animals.php'],
+            ['label' => $animal['name']],
+        ];
+        require __DIR__ . '/includes/breadcrumbs.php';
+        ?>
 
         <div class="card border-0 shadow-sm">
             <div class="card-body p-3 p-lg-4">

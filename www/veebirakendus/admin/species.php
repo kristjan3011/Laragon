@@ -13,6 +13,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $positiveId = static fn(mixed $v): int|false => filter_var($v, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 
+    // Ümbernimetamine jätab ID ja kõik loomade viited muutmata.
+    if ($action === 'rename_species' || $action === 'rename_breed') {
+        $kind = $action === 'rename_species' ? 'species' : 'breed';
+        $table = $kind === 'species' ? 'species' : 'breeds';
+        $maxLength = $kind === 'species' ? 50 : 80;
+        $id = $positiveId(is_string($_POST['id'] ?? null) ? $_POST['id'] : '');
+        $name = is_string($_POST['name'] ?? null) ? trim($_POST['name']) : '';
+        $error = null;
+        if ($id === false) {
+            flash_set('Vigane kirje.', 'error');
+            redirect('species.php');
+        }
+        if (mb_strlen($name) < 2 || mb_strlen($name) > $maxLength) {
+            $error = 'Nimi peab olema 2–' . $maxLength . ' tähemärki.';
+        } else {
+            // Tabelinimi pärineb ülalolevast kindlast valikust, väärtused seotakse.
+            $exists = $pdo->prepare("SELECT id FROM {$table} WHERE id = ?");
+            $exists->execute([$id]);
+            if ($exists->fetchColumn() === false) {
+                flash_set('Kirjet ei leitud.', 'error');
+                redirect('species.php');
+            }
+            try {
+                $pdo->prepare("UPDATE {$table} SET name = ? WHERE id = ?")->execute([$name, $id]);
+                flash_set($kind === 'species' ? 'Liigi nimi salvestati.' : 'Tõu nimi salvestati.');
+            } catch (PDOException $ex) {
+                if ($ex->getCode() !== '23000') {
+                    throw $ex;
+                }
+                $error = $kind === 'species' ? 'Selline liik on juba olemas.' : 'Selline tõug on sellel liigil juba olemas.';
+            }
+        }
+        if ($error !== null) {
+            $_SESSION['form_state'] = ['form' => 'rename', 'kind' => $kind, 'id' => $id, 'name' => $name, 'error' => $error];
+            flash_set('Nime ei muudetud. Paranda vormis märgitud viga.', 'error');
+        }
+        redirect('species.php');
+    }
+
     if ($action === 'add_species') {
         $name = trim((string) ($_POST['name'] ?? ''));
         $len = mb_strlen($name);
@@ -147,6 +186,11 @@ $speciesRows = db()->query('SELECT s.id, s.name, COUNT(a.id) AS animal_count
     GROUP BY s.id, s.name ORDER BY s.name')->fetchAll();
 $breeds = breeds_list();
 $speciesOptions = species_list();
+$renameState = is_array($formState) && ($formState['form'] ?? '') === 'rename' ? $formState : [];
+$renameError = static fn(string $kind, int $id): ?string =>
+    ($renameState['kind'] ?? '') === $kind && ($renameState['id'] ?? null) === $id ? (string) $renameState['error'] : null;
+$renameValue = static fn(string $kind, int $id, string $original): string =>
+    ($renameState['kind'] ?? '') === $kind && ($renameState['id'] ?? null) === $id ? (string) $renameState['name'] : $original;
 ?>
 
 <h1 class="h3 mb-4"><i class="fa-solid fa-tags text-success me-2"></i>Liigid ja tõud</h1>
@@ -174,7 +218,21 @@ $speciesOptions = species_list();
                             <?php endif; ?>
                             <?php foreach ($speciesRows as $row): ?>
                                 <tr>
-                                    <td><?= e($row['name']) ?></td>
+                                    <td>
+                                        <form method="post" action="species.php">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="action" value="rename_species">
+                                            <input type="hidden" name="id" value="<?= (int) $row['id'] ?>">
+                                            <label for="species-name-<?= (int) $row['id'] ?>" class="visually-hidden">Liigi <?= e($row['name']) ?> nimi</label>
+                                            <div class="input-group input-group-sm">
+                                                <input id="species-name-<?= (int) $row['id'] ?>" type="text" name="name" required minlength="2" maxlength="50"
+                                                    class="form-control<?= $renameError('species', (int) $row['id']) !== null ? ' is-invalid' : '' ?>"
+                                                    value="<?= e($renameValue('species', (int) $row['id'], $row['name'])) ?>">
+                                                <button type="submit" class="btn btn-outline-success">Salvesta</button>
+                                                <div class="invalid-feedback"><?= e($renameError('species', (int) $row['id']) ?? '') ?></div>
+                                            </div>
+                                        </form>
+                                    </td>
                                     <td><span class="badge bg-secondary"><?= (int) $row['animal_count'] ?></span></td>
                                     <td class="text-end">
                                         <form method="post" action="species.php" class="d-inline"
@@ -195,7 +253,7 @@ $speciesOptions = species_list();
 
                 <hr>
 
-                <form method="post" action="species.php" novalidate>
+                <form method="post" action="species.php">
                     <?= csrf_field() ?>
                     <input type="hidden" name="action" value="add_species">
                     <label for="species_name" class="form-label fw-semibold">Uus liik</label>
@@ -232,7 +290,21 @@ $speciesOptions = species_list();
                             <?php foreach ($breeds as $breed): ?>
                                 <tr>
                                     <td><?= e($breed['species_name']) ?></td>
-                                    <td><?= e($breed['name']) ?></td>
+                                    <td>
+                                        <form method="post" action="species.php">
+                                            <?= csrf_field() ?>
+                                            <input type="hidden" name="action" value="rename_breed">
+                                            <input type="hidden" name="id" value="<?= (int) $breed['id'] ?>">
+                                            <label for="breed-name-<?= (int) $breed['id'] ?>" class="visually-hidden">Tõu <?= e($breed['name']) ?> nimi</label>
+                                            <div class="input-group input-group-sm">
+                                                <input id="breed-name-<?= (int) $breed['id'] ?>" type="text" name="name" required minlength="2" maxlength="80"
+                                                    class="form-control<?= $renameError('breed', (int) $breed['id']) !== null ? ' is-invalid' : '' ?>"
+                                                    value="<?= e($renameValue('breed', (int) $breed['id'], $breed['name'])) ?>">
+                                                <button type="submit" class="btn btn-outline-success">Salvesta</button>
+                                                <div class="invalid-feedback"><?= e($renameError('breed', (int) $breed['id']) ?? '') ?></div>
+                                            </div>
+                                        </form>
+                                    </td>
                                     <td class="text-end">
                                         <form method="post" action="species.php" class="d-inline"
                                             onsubmit="return confirm('Kustutada tõug? Selle tõuga loomadel jääb tõug määramata.')">
@@ -252,7 +324,7 @@ $speciesOptions = species_list();
 
                 <hr>
 
-                <form method="post" action="species.php" novalidate>
+                <form method="post" action="species.php">
                     <?= csrf_field() ?>
                     <input type="hidden" name="action" value="add_breed">
                     <div class="mb-3">

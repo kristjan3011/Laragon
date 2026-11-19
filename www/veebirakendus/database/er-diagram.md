@@ -1,79 +1,95 @@
-# Ülesanne 5 – ER-diagramm
+# Lõppversiooni ER-diagramm
 
-Diagramm on koostatud Mermaid-süntaksis, mis kuvatakse GitHubis automaatselt. Tabelid vastavad Ülesanne 6 struktuurile.
+Diagramm kirjeldab `www/veebirakendus/sql/schema.sql` faili ja andmebaasi `mario_kapakodu`. Olemasolevale paigaldusele lisab uued seosed `sql/migrations/20261119_course_completion.sql`. Mermaid-diagramm kuvatakse GitHubis.
 
 ```mermaid
 erDiagram
-    liigid ||--o{ toud : "sisaldab"
-    liigid ||--o{ loomad : "kuulub liigile"
-    toud ||--o{ loomad : "kuulub tõugu"
-    tootajad ||--o{ loomad : "lisas"
-    loomad |o--o{ paringud : "seotud"
+    species ||--o{ breeds : "sisaldab"
+    species ||--o{ animals : "liigitab"
+    breeds |o--o{ animals : "täpsustab"
+    users |o--o{ animals : "lisas"
+    animals |o--o{ contact_requests : "käsitleb"
 
-    liigid {
+    species {
+        int_unsigned id PK
+        varchar name UK
+    }
+    breeds {
+        int_unsigned id PK
+        int_unsigned species_id FK
+        varchar name "UNIQUE koos species_id-ga"
+    }
+    users {
+        int_unsigned id PK
+        varchar name
+        varchar email UK
+        varchar password_hash
+        enum role "admin või toimetaja"
+        timestamp created_at
+    }
+    animals {
+        int_unsigned id PK
+        varchar name
+        int_unsigned species_id FK
+        int_unsigned breed_id FK "NULL lubatud"
+        int_unsigned created_by FK "NULL lubatud"
+        enum sex
+        date birth_date
+        varchar size "NULL lubatud"
+        varchar color "NULL lubatud"
+        varchar location "NULL lubatud"
+        boolean neutered
+        boolean chipped
+        varchar short_description
+        text description "NULL lubatud"
+        enum status
+        varchar image "NULL lubatud"
+        timestamp created_at
+    }
+    contact_requests {
+        int_unsigned id PK
+        int_unsigned animal_id FK "NULL lubatud"
+        varchar name
+        varchar email
+        enum topic
+        text message
+        enum status
+        timestamp created_at
+    }
+    menu {
         int id PK
         varchar nimetus
-    }
-    toud {
-        int id PK
-        int liik_id FK
-        varchar nimetus
-    }
-    tootajad {
-        int id PK
-        varchar nimi
-        varchar email
-        varchar telefon
-        varchar parool
-        enum roll
-        datetime lisatud
-    }
-    loomad {
-        int id PK
-        varchar nimi
-        int liik_id FK
-        int toug_id FK
-        int tootaja_id FK
-        enum sugu
-        int vanus
-        date sunnikuupaev
-        enum suurus
-        varchar varvus
-        varchar asukoht
-        varchar luhikirjeldus
-        text kirjeldus
-        varchar pilt
-        enum staatus
-        boolean steriliseeritud
-        boolean kiibistatud
-        date lisatud
-    }
-    paringud {
-        int id PK
-        int loom_id FK
-        varchar nimi
-        varchar email
-        varchar teema
-        text sonum
-        enum staatus
-        datetime lisatud
+        varchar url
+        varchar ikoon "NULL lubatud"
+        int jarjekord
+        boolean aktiivne
+        timestamp loodud
     }
 ```
 
-## Kardinaalsused
+## Seosed ja kustutamine
 
-- Üks liik sisaldab mitut tõugu (`liigid` 1 : N `toud`), iga tõug kuulub ühele liigile.
-- Üks liik sisaldab mitut looma, iga loom kuulub ühele liigile (`liigid` 1 : N `loomad`).
-- Üks tõug sisaldab mitut looma, iga loom kuulub ühele tõule (`toud` 1 : N `loomad`).
-- Üks töötaja lisab mitu looma, iga loom on lisatud ühe töötaja poolt (`tootajad` 1 : N `loomad`).
-- Looma kohta võib olla mitu päringut, päring võib olla seotud ühe loomaga või mitte (`loomad` 1 : N `paringud`, `paringud.loom_id` on NULL-lubatav).
-
-## Võõrvõtmed
-
-| Tabel | Väli | Viitab | Reegel |
+| Viitav väli | Viidatav väli | ON DELETE | ON UPDATE |
 | --- | --- | --- | --- |
-| toud | liik_id | liigid.id | ON DELETE RESTRICT, ON UPDATE CASCADE |
-| loomad | liik_id | liigid.id | ON DELETE RESTRICT, ON UPDATE CASCADE |
-| loomad | toug_id | toud.id | ON DELETE RESTRICT, ON UPDATE CASCADE |
-| loomad | tootaja_id | tootajad.id | ON DELETE RESTRICT, ON UPDATE CASCADE |
-| paringud | loom_id | loomad.id | ON DELETE RESTRICT, ON UPDATE CASCADE |
+| `breeds.species_id` | `species.id` | CASCADE | RESTRICT |
+| `animals.species_id` | `species.id` | RESTRICT | RESTRICT |
+| `animals.breed_id` | `breeds.id` | SET NULL | RESTRICT |
+| `animals.created_by` | `users.id` | SET NULL | CASCADE |
+| `contact_requests.animal_id` | `animals.id` | SET NULL | CASCADE |
+
+Kui SQL-is puudub `ON UPDATE` reegel, kasutab MySQL vaikimisi `NO ACTION` käitumist, mis InnoDB korral vastab `RESTRICT`-ile. Liiki ei saa kustutada, kui sellele viitab loom. Looma tõu kustutamisel jääb loom alles ning tõuviide muutub `NULL`-iks. Kasutaja kustutamisel jääb loom alles; looma kustutamisel jääb kontaktipäring alles.
+
+Üks liik võib sisaldada mitut tõugu ja looma; iga loom kuulub ühele liigile. Tõug, lisaja ja kontaktipäringu loomaseos võivad puududa. `menu` on eraldiseisev tabel ega vaja kunstlikku seost teiste tabelitega. Vanade loomade lisaja on migratsiooni järel teadmata (`NULL`); uue looma lisamisel määrab rakendus lisajaks sisseloginud kasutaja. Päring võib olla üldine või puudutada ühte looma.
+
+## Vastavus kursuse varasema etapiga
+
+| Varasema `kapakodu` skeemi tabel | Lõppversiooni tabel |
+| --- | --- |
+| `liigid` | `species` |
+| `toud` | `breeds` |
+| `tootajad` | `users` |
+| `loomad` | `animals` |
+| `paringud` | `contact_requests` |
+| `menu` | `menu` |
+
+`database/kapakodu.sql` ja `database/designer.png` säilitavad ülesannete 2–6 ajaloolise lahenduse. Need ei kirjelda käesolevat lõppskeemi. Näiteks loomade vanus arvutatakse lõppversioonis `birth_date` järgi, mitte ei säilitata eraldi vanuseveerus.

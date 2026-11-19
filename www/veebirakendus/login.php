@@ -51,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_regenerate_id(true);
 
         // Küpsis salvestab ainult e-posti aadressi (mitte parooli), 30 päeva
-        $rememberCookie = ['path' => '/', 'httponly' => true, 'samesite' => 'Lax'];
+        $rememberCookie = ['path' => '/', 'httponly' => true, 'samesite' => 'Lax',
+            'secure' => !empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off'];
         if (!empty($_POST['remember'])) {
             setcookie('remember_email', $user['email'], $rememberCookie + ['expires' => time() + 60 * 60 * 24 * 30]);
         } else {
@@ -133,13 +134,18 @@ require __DIR__ . '/includes/header.php';
                                         <?= $rememberChecked ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="remember">Jäta mind meelde</label>
                                 </div>
-                                <a href="#" class="text-success text-decoration-none">Unustasid parooli?</a>
+                                <a href="#parooli-abi" class="text-success text-decoration-none">Unustasid parooli?</a>
                             </div>
 
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-success">Logi sisse</button>
                             </div>
                         </form>
+                        <div id="parooli-abi" class="small text-muted mt-4">
+                            <h2 class="h6">Parooli abi</h2>
+                            <p class="mb-0">Parooli muutmiseks võta ühendust varjupaiga administraatoriga
+                                <a href="contact.php#kirjuta">kontaktivormi kaudu</a>. Ära saada oma parooli sõnumis.</p>
+                        </div>
                     </div>
                 </div>
             </div>

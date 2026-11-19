@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/functions.php';
 
 // Kontroll enne POST-käsitlust: anonüümne POST ei tohi lisada ega muuta
-require_login('../login.php');
+$creator = require_login('../login.php');
 
 // Üleslaaditud pildi eemaldamine (ainult assets/uploads kaustast)
 if (!function_exists('remove_uploaded_image')) {
@@ -265,10 +265,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 } else {
                     $params[':image'] = $newImage;
+                    $params[':created_by'] = (int) $creator['id'];
                     $sql = 'INSERT INTO animals (name, species_id, breed_id, sex, birth_date, size, color, location,
-                            neutered, chipped, short_description, description, status, image)
+                            neutered, chipped, short_description, description, status, image, created_by)
                             VALUES (:name, :species_id, :breed_id, :sex, :birth_date, :size, :color, :location,
-                            :neutered, :chipped, :short_description, :description, :status, :image)';
+                            :neutered, :chipped, :short_description, :description, :status, :image, :created_by)';
                     $pdo->prepare($sql)->execute($params);
                 }
             } catch (Throwable $ex) {

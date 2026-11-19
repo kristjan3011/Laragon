@@ -1,8 +1,11 @@
 <?php
+date_default_timezone_set('Europe/Tallinn');
+
 // Rakenduse seaded. Andmebaasi andmed saab üle kirjutada keskkonnamuutujatega (DB_HOST, DB_NAME, DB_USER, DB_PASS).
 return [
     'db' => [
         'host' => getenv('DB_HOST') ?: '127.0.0.1',
+        'port' => (int) (getenv('DB_PORT') ?: 3306),
         'name' => getenv('DB_NAME') ?: 'mario_kapakodu',
         'user' => getenv('DB_USER') ?: 'root',
         'pass' => getenv('DB_PASS') ?: '',

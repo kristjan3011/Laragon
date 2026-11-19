@@ -2,14 +2,14 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/functions.php';
 
-// Kuus viimati lisatud looma, kes ei ole veel kodus
+// Neli viimati lisatud looma, kes ei ole veel kodus
 $stmt = db()->prepare("SELECT a.id, a.name, a.sex, a.birth_date, a.short_description, a.image, a.status,
         s.name AS species_name
     FROM animals a
     JOIN species s ON s.id = a.species_id
     WHERE a.status <> :kodus
-    ORDER BY a.created_at DESC, a.id DESC
-    LIMIT 6");
+    ORDER BY a.id DESC
+    LIMIT 4");
 $stmt->execute(['kodus' => 'Kodus']);
 $animals = $stmt->fetchAll();
 
@@ -18,18 +18,18 @@ $active = 'home';
 $pageTitle = 'Avaleht';
 require __DIR__ . '/includes/header.php';
 ?>
-    <div class="container-fluid">
+    <main class="container-fluid">
         <!-- Hero section -->
         <div class="container">
             <div class="hero position-relative">
                 <div class="hero-text position-absolute top-50 translate-middle-y">
                     <div class="row p-4">
-                        <div class="col-7 p-4">
+                        <div class="col-12 col-md-9 col-lg-7 p-3 p-lg-4">
                             <h1 class="display-4 fw-bold">Iga loom väärib armastust ja kodu</h1>
                             <p class="fs-5 pt-4 pb-4">Meie varjupaigas ootavad paljud toredad loomad oma päriskodu. Tule ja leia endale uus parim sõber!</p>
                             <div class="d-flex gap-2">
                                 <a class="btn btn-success p-2 w-100" href="all_animals.php"><i class="fa-solid fa-paw"></i> Vaata loomi</a>
-                                <a class="btn btn-outline-success bg-white p-2 w-100" href="#">Kuidas aidata?</a>
+                                <a class="btn btn-outline-success bg-white p-2 w-100" href="contact.php?topic=volunteer#kirjuta">Kuidas aidata?</a>
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@ require __DIR__ . '/includes/header.php';
         </div>
 
         <!-- Mission section -->
-        <div class="container py-5">
+        <div class="container py-5" id="meist">
             <div class="row align-items-center">
                 <div class="col-lg-7">
                     <div class="row align-items-center">
@@ -52,7 +52,7 @@ require __DIR__ . '/includes/header.php';
                                 Meie eesmärk on leida igale loomale soe ja armastav kodu ning
                                 tõsta inimeste teadlikkust loomade heaolust.
                             </p>
-                            <a class="btn btn-outline-success px-5 py-2" href="#">Loe lähemalt meist</a>
+                            <a class="btn btn-outline-success px-5 py-2" href="contact.php#kontaktandmed">Võta meiega ühendust</a>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@ require __DIR__ . '/includes/header.php';
                 <div class="row g-4">
                     <?php foreach ($animals as $animal): ?>
                         <?php $imageUrl = animal_image_url($animal['image'], $base); ?>
-                        <div class="col-sm-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-3">
                             <div class="card h-100 shadow-sm border-0">
                                 <?php if ($imageUrl !== null): ?>
                                     <img src="<?= e($imageUrl) ?>" class="card-img-top" alt="<?= e($animal['name']) ?>">
@@ -133,5 +133,5 @@ require __DIR__ . '/includes/header.php';
             </div>
         </div>
         <!-- Animals section end -->
-    </div>
+    </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>

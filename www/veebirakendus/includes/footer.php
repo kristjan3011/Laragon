@@ -5,7 +5,7 @@
         <div class="container py-5">
             <div class="row gy-4">
                 <div class="col-lg-3">
-                    <p class="fw-bold fs-5 mb-0">Loomade Varjupaik</p>
+                    <p class="fw-bold fs-5 mb-0">Mario Käpakodu</p>
                     <p class="mt-3">Aitame koduta ja hätta sattunud loomi ning leiame neile armastavad kodud.</p>
                 </div>
                 <div class="col-lg-3">
@@ -13,8 +13,8 @@
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="<?= e($base) ?>index.php" class="text-decoration-none text-dark">Avaleht</a></li>
                         <li class="mb-2"><a href="<?= e($base) ?>all_animals.php" class="text-decoration-none text-dark">Loomad</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Kuidas aidata</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Meist</a></li>
+                        <li class="mb-2"><a href="<?= e($base) ?>contact.php?topic=volunteer#kirjuta" class="text-decoration-none text-dark">Kuidas aidata</a></li>
+                        <li class="mb-2"><a href="<?= e($base) ?>index.php#meist" class="text-decoration-none text-dark">Meist</a></li>
                         <li><a href="<?= e($base) ?>contact.php" class="text-decoration-none text-dark">Kontakt</a></li>
                     </ul>
                 </div>
@@ -28,12 +28,12 @@
                 <div class="col-lg-3">
                     <h2 class="h5 fw-bold mb-3">Toeta meid</h2>
                     <p>Sinu annetus aitab meil pakkuda loomadele paremat elu.</p>
-                    <a href="#" class="btn btn-success px-4">Anneta</a>
+                    <a href="<?= e($base) ?>contact.php?topic=donation#kirjuta" class="btn btn-success px-4">Anneta</a>
                 </div>
             </div>
             <hr class="my-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <small>&copy; <?= date('Y') ?> Loomade Varjupaik. Kõik õigused kaitstud.</small>
+                <small>&copy; <?= date('Y') ?> Mario Käpakodu. Kõik õigused kaitstud.</small>
                 <?php if (consent_status() !== null): ?>
                     <form method="post" action="<?= e($base) ?>kuepsised.php">
                         <?= csrf_field() ?>

@@ -68,6 +68,10 @@ require __DIR__ . '/includes/header.php';
 ?>
     <!-- Animals page -->
     <main class="container py-5">
+        <?php
+        $breadcrumbs = [['label' => 'Avaleht', 'url' => 'index.php'], ['label' => 'Kõik loomad']];
+        require __DIR__ . '/includes/breadcrumbs.php';
+        ?>
         <div class="text-center mb-5">
             <h1 class="fw-bold">Kõik loomad</h1>
             <p class="text-muted">Tutvu meie hoolealustega ja leia endale uus parim sõber.</p>

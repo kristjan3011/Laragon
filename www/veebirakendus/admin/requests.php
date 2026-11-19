@@ -64,8 +64,8 @@ require __DIR__ . '/../includes/admin_header.php';
 $perPage = max(1, (int) $config['per_page_admin']);
 
 // Kokku ja lehekülgede arv
-$where = $statusFilter !== '' ? 'WHERE status = :status' : '';
-$countStmt = $pdo->prepare("SELECT COUNT(*) FROM contact_requests $where");
+$where = $statusFilter !== '' ? 'WHERE r.status = :status' : '';
+$countStmt = $pdo->prepare("SELECT COUNT(*) FROM contact_requests r $where");
 if ($statusFilter !== '') {
     $countStmt->bindValue(':status', $statusFilter);
 }
@@ -76,9 +76,10 @@ $totalPages = max(1, (int) ceil($total / $perPage));
 $page = min(page_number(), $totalPages);
 $offset = ($page - 1) * $perPage;
 
-$listStmt = $pdo->prepare("SELECT id, name, email, topic, message, status, created_at
-    FROM contact_requests $where
-    ORDER BY created_at DESC, id DESC
+$listStmt = $pdo->prepare("SELECT r.id, r.name, r.email, r.topic, r.message, r.status, r.created_at,
+        a.id AS animal_id, a.name AS animal_name
+    FROM contact_requests r LEFT JOIN animals a ON a.id = r.animal_id $where
+    ORDER BY r.created_at DESC, r.id DESC
     LIMIT :limit OFFSET :offset");
 if ($statusFilter !== '') {
     $listStmt->bindValue(':status', $statusFilter);
@@ -145,7 +146,11 @@ $filters = ['' => 'Kõik', 'Uus' => 'Uus', 'Vastatud' => 'Vastatud'];
                     <tr>
                         <td><?= e($r['name']) ?></td>
                         <td><a href="mailto:<?= e($r['email']) ?>"><?= e($r['email']) ?></a></td>
-                        <td><?= e($r['topic']) ?></td>
+                        <td><?= e($r['topic']) ?>
+                            <?php if ($r['animal_id'] !== null): ?>
+                                <div class="small"><a href="../animal.php?id=<?= (int) $r['animal_id'] ?>"><?= e($r['animal_name']) ?></a></div>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <?php if ($isLong): ?>
                                 <details>

@@ -114,9 +114,10 @@ $pages = max(1, (int) ceil($total / $perPage));
 $page = min($page, $pages);
 $offset = ($page - 1) * $perPage;
 
-$listStmt = $pdo->prepare("SELECT a.id, a.name, a.sex, a.birth_date, a.status, a.image, a.created_at, s.name AS species_name
+$listStmt = $pdo->prepare("SELECT a.id, a.name, a.sex, a.birth_date, a.status, a.image, a.created_at, s.name AS species_name, u.name AS creator_name
     FROM animals a
     JOIN species s ON s.id = a.species_id
+    LEFT JOIN users u ON u.id = a.created_by
     $whereSql
     ORDER BY a.created_at DESC, a.id DESC
     LIMIT {$perPage} OFFSET {$offset}");
@@ -205,12 +206,13 @@ $pageUrl = fn(int $n) => 'animals.php?' . http_build_query(array_merge($filters,
                     <th scope="col">Vanus</th>
                     <th scope="col">Staatus</th>
                     <th scope="col">Lisatud</th>
+                    <th scope="col">Lisaja</th>
                     <th scope="col" class="text-end">Tegevused</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (!$animals): ?>
-                    <tr><td colspan="8" class="text-center text-muted py-4">Filtritele vastavaid loomi ei leitud.</td></tr>
+                    <tr><td colspan="9" class="text-center text-muted py-4">Filtritele vastavaid loomi ei leitud.</td></tr>
                 <?php endif; ?>
                 <?php foreach ($animals as $a): ?>
                     <?php $imageUrl = animal_image_url($a['image'], '../'); ?>
@@ -230,6 +232,7 @@ $pageUrl = fn(int $n) => 'animals.php?' . http_build_query(array_merge($filters,
                         <td><?= e(age_label($a['birth_date'])) ?></td>
                         <td><span class="badge <?= e(status_badge_class($a['status'])) ?>"><?= e($a['status']) ?></span></td>
                         <td><?= e((new DateTimeImmutable($a['created_at']))->format('d.m.Y')) ?></td>
+                        <td><?= e($a['creator_name'] ?? 'Teadmata') ?></td>
                         <td class="text-end text-nowrap">
                             <a href="../animal.php?id=<?= e($a['id']) ?>" class="btn btn-sm btn-outline-secondary" aria-label="Vaata: <?= e($a['name']) ?>" title="Vaata"><i class="fa-solid fa-eye"></i></a>
                             <a href="animal_form.php?id=<?= e($a['id']) ?>" class="btn btn-sm btn-outline-primary" aria-label="Muuda: <?= e($a['name']) ?>" title="Muuda"><i class="fa-solid fa-pen"></i></a>

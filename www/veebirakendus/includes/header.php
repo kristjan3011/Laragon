@@ -12,11 +12,11 @@ $pageTitle = $pageTitle ?? 'Mario Käpakodu';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?= e($base) ?>assets/css/style.css">
     <title><?= e($pageTitle) ?> | Mario Käpakodu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="<?= e($base) ?>assets/css/style.css">
 </head>
 
 <body>
@@ -35,7 +35,7 @@ $pageTitle = $pageTitle ?? 'Mario Käpakodu';
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <?php // Menüü loetakse tabelist menu (ülesanne 10) ?>
                         <?php foreach (db()->query('SELECT nimetus, url FROM menu WHERE aktiivne = 1 ORDER BY jarjekord')->fetchAll() as $item): ?>
-                            <li class="nav-item"><a class="nav-link <?= basename($_SERVER['SCRIPT_NAME']) === $item['url'] ? 'active' : '' ?>" href="<?= e($base) ?><?= e($item['url']) ?>"><strong><?= e($item['nimetus']) ?></strong></a></li>
+                            <li class="nav-item"><a class="nav-link <?= basename($_SERVER['SCRIPT_NAME']) === $item['url'] || ($active === 'animals' && $item['url'] === 'all_animals.php') ? 'active' : '' ?>" href="<?= e($base) ?><?= e($item['url']) ?>"><strong><?= e($item['nimetus']) ?></strong></a></li>
                         <?php endforeach; ?>
                     </ul>
                     <?php if ($user): ?>
@@ -43,7 +43,7 @@ $pageTitle = $pageTitle ?? 'Mario Käpakodu';
                     <?php else: ?>
                         <a class="btn btn-outline-success me-2" href="<?= e($base) ?>login.php">Logi sisse</a>
                     <?php endif; ?>
-                    <a class="btn btn-success" href="#">Anneta <i class="fa-solid fa-heart-circle-check"></i></a>
+                    <a class="btn btn-success" href="<?= e($base) ?>contact.php?topic=donation#kirjuta">Anneta <i class="fa-solid fa-heart-circle-check"></i></a>
                 </div>
             </div>
         </nav>

@@ -4,6 +4,23 @@ require_once __DIR__ . '/includes/functions.php';
 
 $values = ['name' => '', 'email' => '', 'topic' => '', 'message' => ''];
 $errors = [];
+$animalId = null;
+$animalInput = $_SERVER['REQUEST_METHOD'] === 'POST' ? ($_POST['animal_id'] ?? '') : ($_GET['animal'] ?? '');
+if ($animalInput !== '') {
+    $validatedAnimalId = filter_var(is_string($animalInput) ? $animalInput : null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    if ($validatedAnimalId === false) {
+        $errors['animal_id'] = 'Looma viide on vigane. Ava kontaktivorm uuesti looma detailvaatest.';
+    } else {
+        $animalLookup = db()->prepare('SELECT id, name FROM animals WHERE id = :id LIMIT 1');
+        $animalLookup->execute(['id' => $validatedAnimalId]);
+        $relatedAnimal = $animalLookup->fetch();
+        if ($relatedAnimal === false) {
+            $errors['animal_id'] = 'Valitud looma ei leitud. Ava kontaktivorm uuesti.';
+        } else {
+            $animalId = (int) $relatedAnimal['id'];
+        }
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verify();
@@ -39,9 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($errors === []) {
-        $stmt = db()->prepare("INSERT INTO contact_requests (name, email, topic, message, status)
-            VALUES (:name, :email, :topic, :message, :status)");
+        $stmt = db()->prepare("INSERT INTO contact_requests (animal_id, name, email, topic, message, status)
+            VALUES (:animal_id, :name, :email, :topic, :message, :status)");
         $stmt->execute([
+            'animal_id' => $animalId,
             'name' => $values['name'],
             'email' => $values['email'],
             'topic' => $values['topic'],
@@ -52,16 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('contact.php');
     }
 } else {
-    // Loomapõhine eelvalik: ?animal=ID
-    $animalId = filter_input(INPUT_GET, 'animal', FILTER_VALIDATE_INT) ?: 0;
-    if ($animalId > 0) {
-        $stmt = db()->prepare('SELECT name FROM animals WHERE id = :id LIMIT 1');
-        $stmt->execute(['id' => $animalId]);
-        $animalName = $stmt->fetchColumn();
-        if ($animalName !== false) {
-            $values['topic'] = 'Looma adopteerimine';
-            $values['message'] = 'Tahaksin tutvuda: ' . $animalName;
-        }
+    $topicKey = is_string($_GET['topic'] ?? null) ? $_GET['topic'] : '';
+    $values['topic'] = match ($topicKey) {
+        'volunteer' => 'Vabatahtlik töö',
+        'donation' => 'Annetamine',
+        default => '',
+    };
+    if ($animalId !== null) {
+        $values['topic'] = 'Looma adopteerimine';
+        $values['message'] = 'Tahaksin tutvuda: ' . $relatedAnimal['name'];
     }
 }
 
@@ -75,6 +92,10 @@ require __DIR__ . '/includes/header.php';
 ?>
     <!-- Contact -->
     <main class="container py-5">
+        <?php
+        $breadcrumbs = [['label' => 'Avaleht', 'url' => 'index.php'], ['label' => 'Kontakt']];
+        require __DIR__ . '/includes/breadcrumbs.php';
+        ?>
         <div class="mb-5">
             <h1 class="fw-bold display-4">Kontakt</h1>
             <p class="fs-5 text-muted">Võta meiega ühendust – vastame hea meelega kõigile küsimustele.</p>
@@ -89,7 +110,7 @@ require __DIR__ . '/includes/header.php';
             <div class="col-lg-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body p-4">
-                        <h2 class="fw-bold mb-4">Meie kontaktandmed</h2>
+                        <h2 class="fw-bold mb-4" id="kontaktandmed">Meie kontaktandmed</h2>
 
                         <div class="d-flex mb-4">
                             <i class="fa-solid fa-location-dot text-success fa-2x fa-fw me-3 mt-1" aria-hidden="true"></i>
@@ -123,16 +144,8 @@ require __DIR__ . '/includes/header.php';
                             </div>
                         </div>
 
-                        <h3 class="h5 fw-bold mb-3">
-                            <i class="fa-solid fa-share-nodes text-success me-2" aria-hidden="true"></i>
-                            Jälgi meid
-                        </h3>
-
-                        <div class="d-flex gap-3">
-                            <a href="#" class="text-decoration-none" aria-label="Facebook"><i class="fa-brands fa-facebook fa-2x text-primary" aria-hidden="true"></i></a>
-                            <a href="#" class="text-decoration-none" aria-label="Instagram"><i class="fa-brands fa-instagram fa-2x" style="color:#E1306C;" aria-hidden="true"></i></a>
-                            <a href="#" class="text-decoration-none" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2x text-danger" aria-hidden="true"></i></a>
-                        </div>
+                        <h3 class="h5 fw-bold mb-3">Kuidas saad aidata?</h3>
+                        <p class="mb-0">Soovid annetada või vabatahtlikuna aidata? Vali kontaktivormis sobiv teema ja kirjuta meile.</p>
                     </div>
                 </div>
             </div>
@@ -141,10 +154,16 @@ require __DIR__ . '/includes/header.php';
             <div class="col-lg-8">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h2 class="fw-bold mb-4">Kirjuta meile</h2>
+                        <h2 class="fw-bold mb-4" id="kirjuta">Kirjuta meile</h2>
 
                         <form method="post" action="contact.php">
                             <?= csrf_field() ?>
+                            <input type="hidden" name="animal_id" value="<?= $animalId !== null ? (int) $animalId : e(is_string($animalInput) ? $animalInput : 'vigane') ?>">
+                            <?php if (isset($errors['animal_id'])): ?>
+                                <div class="alert alert-danger" role="alert"><?= e($errors['animal_id']) ?></div>
+                            <?php elseif ($animalId !== null): ?>
+                                <p class="small text-muted">Päring looma kohta: <strong><?= e($relatedAnimal['name']) ?></strong></p>
+                            <?php endif; ?>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="name" class="form-label fw-semibold">Sinu nimi</label>
